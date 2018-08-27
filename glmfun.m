@@ -1,19 +1,26 @@
-function [XX,P,M] = glmfun(Vlo, Vhi,pval,varargin)
+function [XX,P] = glmfun(Vlo, Vhi,pval,ci,varargin)
 %INPUTS:
-%Vlo: Low frequency signal (4-7Hz)
-%Vhi: High frequency signal (100-140Hz)
-%nCtlPts: number of control points, for spline phase
-
-%varargin: optional quantile to fit AmpLO only over a range of ALOW values
-
-%varargin: optionally, include the parameter q indicating which quantiles
-%of AmpLo you'd like to fit over
+% Vlo:                   Low frequency signal
+% Vhi:                   High frequency signal
+% nCtlPts:               number of control points, for spline phase
+% pval:                  'theoretical' gives analytic p-values for R
+%                        'empirical' gives bootstrapped p-values for R
+% ci:                    'ci' gives confidence intervals, 'none' gives no confidence intervals
+% varargin:              optionally, include the parameter q indicating which quantiles
+%                        of AmpLo you'd like to fit over
 
 
 %OUTPUTS:
-%XX.rpac: R_PAC value, confidence intervals XX.rPAC_CI
-%XX.raac: R_AAC value, confidence intervals XX.rAAC_CI
-%XX.rcfc: R_CFC value, confidence intervals XX.rCFC_CI
+% XX.rpac:      R_PAC value, confidence intervals XX.rPAC_CI
+% XX.raac:      R_AAC value, confidence intervals XX.rAAC_CI
+% XX.rcfc:      R_CFC value, confidence intervals XX.rCFC_CI
+% XX.null:      3D surface for null model in Phi_low, A_low, A_high space
+% XX.PAC:       3D surface for PAC model in Phi_low, A_low, A_high space
+% XX.AAC:       3D surface for AAC model in Phi_low, A_low, A_high space
+% XX.CFC:       3D surface for CFC model in Phi_low, A_low, A_high space
+% P.rpac:       p-value for RPAC statistic
+% P.raac:       p-value for RAAC statistic
+% P.rcfc:       p-value for RCFC statistic
       
   nCtlPts = 10;
 
@@ -21,7 +28,6 @@ function [XX,P,M] = glmfun(Vlo, Vhi,pval,varargin)
   phi = angle(hilbert(Vlo));
   amp = abs(hilbert(Vhi));
   ampLO = abs(hilbert(Vlo));
-  AFIX = max(ampLO);
   
   %Define variables for GLM procedure.
   Y = amp';                                                                 %high frequency amplitude
@@ -36,7 +42,7 @@ function [XX,P,M] = glmfun(Vlo, Vhi,pval,varargin)
   [b3,  dev3, stats3] = glmfit(X3, Y, 'gamma','link','log','constant','off');       %CFC
   [bC, dev0, statsC] = glmfit(XC, Y, 'gamma', 'link', 'log', 'constant', 'off');    %null
   
-  %Chi^2 test between nested models
+  %Chi^2 test between nested models (theoretical p-values)
   chi0 = 1-chi2cdf(dev0-dev3,12);
   chi1 = 1-chi2cdf(dev1-dev3,3); %Between PAC and PACAAC Model, if low AAC is present
   chi2 = 1-chi2cdf(dev2-dev3,11); %Between AAC and PACAAC Model, if low PAC is present
@@ -65,84 +71,72 @@ function [XX,P,M] = glmfun(Vlo, Vhi,pval,varargin)
       end
       L = length(1:100:length(ampSORT));
       XX1 = repmat(spline1,1,L); %PAC model constant in PhiLow dimension
-      XX1 = XX1;
       XXC = repmat(splineC,1,L); %null model constant in PhiLow, Alow dimensions
-      XXC = XXC;
       temp = ampSORT(1:100:end);
       Y2 = [ones(size(temp')),temp'];
-      [spline2,dev2,statsAAC] = glmval(b2,Y2,'log',stats2,'constant','off'); %AAC model, function of Alow
+      [spline2,~,~] = glmval(b2,Y2,'log',stats2,'constant','off'); %AAC model, function of Alow
       Xtemp = repmat(spline2,1,100);                                         %AAC model constant in PhiLow dimension
       
-      XX.AAC = Xtemp'; XX.null = XXC; XX.PAC = XX1;XX.PACAAC = XX3;          %3D model surfaces
-      XX.mAAC = (XX.AAC(1,L)-XX.AAC(1,1))/(ampAXIS(L)-ampAXIS(1));
-      
-      
+      XX.AAC = Xtemp'; XX.null = XXC; XX.PAC = XX1;XX.CFC = XX3;          %3D model surfaces
+         
       XX.ampAXIS = ampAXIS; XX.phi0 = phi0;     %axes
       XX.rpac = max(max((abs(1-XX1./XXC))));
       XX.raac = max(max((abs(1-Xtemp'./XXC))));
       XX.rcfc = max(max((abs(1-XX3./XXC))));
-      [m,I] = max(abs(1-XX.PACAAC./XX.null)); %find point of maximum distance between null, CFC models
-      [M,j] = max(m);                         %j ampLO, I(j) phiLO
-      XX.relPAC = max(abs(XX.PAC(I(j),j)-XX.null(I(j),j)))/max(abs(XX.PACAAC(I(j),j)-XX.null(I(j),j)));
-      XX.relAAC = max(abs(XX.AAC(I(j),j)-XX.null(I(j),j)))/max(abs(XX.PACAAC(I(j),j)-XX.null(I(j),j)));
 
-  %Define dense phase points for interpolation.
-  phi0 = linspace(-pi,pi,100);
-  X0 = spline_phase0(phi0',nCtlPts);
-  Amax = max(ampSORT); Amin = min(ampSORT); stepsize = (Amax-Amin)/99;
-  X2eval = Amin:stepsize:Amax; %evaluate on all amplitudes
-  X2eval = [ones(size(phi0))',X2eval'];
-  X3eval = [X0,AFIX*ones(size(phi0))',AFIX*sin(phi0'),AFIX*cos(phi0')];
   
   if exist('pval','var') && strcmp(pval, 'empirical')
-    M = minvals(Vlo,Vhi);
+    M = minvals(Vlo,Vhi); %find empirical p-values
     P.rpac = max(.5,length(find(M.rpac>XX.rpac)))/length(M.rpac);
     P.raac = max(.5,length(find(M.raac>XX.raac)))/length(M.raac);
     P.rcfc = max(.5,length(find(M.rcfc>XX.rcfc)))/length(M.rcfc);
   elseif exist('pval','var') && strcmp(pval, 'theoretical')
-    P.rpac = chi2;
+    P.rpac = chi2;  %use theoretical p-values
     P.raac = chi1;
     P.rcfc = chi0;
   else
     P = 'No p-values output';
   end
   
-%   %Determine CI for the measure r.
-%   M = 10000;
-%   bMC = b1*ones(1,M) + sqrtm(stats1.covb)*normrnd(0,1,nCtlPts,M);
-%   splineMC = glmval(bMC,X0,'log',stats1,'constant', 'off');
-%   mx = zeros(M,1);
-%   for k=1:M
-%       mx(k) = max(abs(1-splineMC(:,k)./splineC));
-%   end
-%   r_CI = quantile(mx, [0.025, 0.975]);
-%   XX.rPAC_CI = r_CI;
-%   
-%   %and for r2
-%   M = 10000;
-%   bMC = b2*ones(1,M) + sqrtm(stats2.covb)*normrnd(0,1,2,M);
-%   splineMC = glmval(bMC,X2eval,'log',stats2,'constant', 'off');
-%   mx = zeros(M,1);
-%   for k=1:M
-%       mx(k) = max(abs(1-splineMC(:,k)./splineC));
-%   end
-%   r2_CI = quantile(mx, [0.025, 0.975]);
-%   XX.rAAC_CI = r2_CI;
-%   
-%   %and for r3
-%   M = 10000;
-%   bMC = b3*ones(1,M) + sqrtm(stats3.covb)*normrnd(0,1,nCtlPts+3,M);
-%   Y1 = spline_phase0(phi0',nCtlPts); %model 1, function of phiLo
-%   Y2 = [Y1,ampAXIS(j)*ones(size(phi0))']; %model 2, function of phiLo, ampLo
-%   Y3 = [Y2,ampAXIS(j)*sin(phi0'),ampAXIS(j)*cos(phi0')];
-%   splineMC = glmval(bMC,Y3,'log',stats3,'constant', 'off');
-%   mx = zeros(M,1);
-%   for k=1:M
-%       mx(k) = max(abs(1-splineMC(:,k)./splineC));
-%   end
-%   r3_CI = quantile(mx, [0.025, 0.975]);
-%   XX.rCFC_CI = r3_CI;
+  if exist('ci','var') && strcmp(ci, 'ci')
+      %Determine CI for the measure RPAC.
+      M = 10000;
+      bMC = b1*ones(1,M) + sqrtm(stats1.covb)*normrnd(0,1,nCtlPts,M);
+      splineMC = glmval(bMC,X0,'log',stats1,'constant', 'off');
+      mx = zeros(M,1);
+      for k=1:M
+          mx(k) = max(abs(1-splineMC(:,k)./splineC));
+      end
+      r_CI = quantile(mx, [0.025, 0.975]);
+      XX.rPAC_CI = r_CI;
 
+      %and for rAAC
+      M = 10000;
+      bMC = b2*ones(1,M) + sqrtm(stats2.covb)*normrnd(0,1,2,M);
+      splineMC = glmval(bMC,X2eval,'log',stats2,'constant', 'off');
+      mx = zeros(M,1);
+      for k=1:M
+          mx(k) = max(abs(1-splineMC(:,k)./splineC));
+      end
+      r2_CI = quantile(mx, [0.025, 0.975]);
+      XX.rAAC_CI = r2_CI;
+
+      %and for rCFC
+      M = 10000;
+      [m,~] = max(abs(1-XX.PACAAC./XX.null)); %find point of maximum distance between null, CFC models
+      [~,j] = max(m);                         %j ampLO, I(j) phiLO
+      bMC = b3*ones(1,M) + sqrtm(stats3.covb)*normrnd(0,1,nCtlPts+3,M);
+      Y1 = spline_phase0(phi0',nCtlPts); %model 1, function of phiLo
+      Y2 = [Y1,ampAXIS(j)*ones(size(phi0))']; %model 2, function of phiLo, ampLo
+      Y3 = [Y2,ampAXIS(j)*sin(phi0'),ampAXIS(j)*cos(phi0')];
+      splineMC = glmval(bMC,Y3,'log',stats3,'constant', 'off');
+      mx = zeros(M,1);
+      for k=1:M
+          mx(k) = max(abs(1-splineMC(:,k)./splineC));
+      end
+      r3_CI = quantile(mx, [0.025, 0.975]);
+      XX.rCFC_CI = r3_CI;
+  end
 
 end
 
