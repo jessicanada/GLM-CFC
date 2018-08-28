@@ -1,7 +1,3 @@
-% Note: the following simulations use a GLM-based method to simulate V_low
-% and V_high, and the p-values are the analytical p-values from the
-% manuscript
-
 %% Signal with neither PAC nor AAC
 
 [XX,P,Vlo,Vhi,t] = simfun(0,0,'GLM','theoretical',.05);
@@ -17,9 +13,12 @@ plot([8,8.1],[-.04,-.04],'k','LineWidth',2)
 legend('V_{low}','V_{high}')
 axis off
 set(gca,'FontSize',13)
-str = strcat({'R_PAC is '},{num2str(XX.rpac)},{' with p-value '},{num2str(P.rpac)}); disp(str);
-str = strcat({'R_AAC is '},{num2str(XX.raac)},{' with p-value '},{num2str(P.raac)}); disp(str);
-str = strcat({'R_CFC is '},{num2str(XX.rcfc)},{' with p-value '},{num2str(P.rcfc)}); disp(str);
+str = strcat({'R_PAC is'},{' '},{num2str(XX.rpac)},{' with p-value '},{num2str(P.r});
+disp(str)
+str = strcat({'R_AAC is'},{' '},{num2str(XX.raac)});
+disp(str)
+str = strcat({'R_PAC is'},{' '},{num2str(XX.rpac)});
+disp(str)
 xlim([8,10])
 
 figure(2)
@@ -51,9 +50,6 @@ plot([8,8.1],[-.04,-.04],'k','LineWidth',2)
 legend('V_{low}','V_{high}')
 axis off
 set(gca,'FontSize',13)
-str = strcat({'R_PAC is '},{num2str(XX.rpac)},{' with p-value '},{num2str(P.rpac)}); disp(str);
-str = strcat({'R_AAC is '},{num2str(XX.raac)},{' with p-value '},{num2str(P.raac)}); disp(str);
-str = strcat({'R_CFC is '},{num2str(XX.rcfc)},{' with p-value '},{num2str(P.rcfc)}); disp(str);
 xlim([8,10])
 
 figure(2)
@@ -85,9 +81,6 @@ plot([8,8.1],[-.04,-.04],'k','LineWidth',2)
 legend('V_{low}','V_{high}')
 axis off
 set(gca,'FontSize',13)
-str = strcat({'R_PAC is '},{num2str(XX.rpac)},{' with p-value '},{num2str(P.rpac)}); disp(str);
-str = strcat({'R_AAC is '},{num2str(XX.raac)},{' with p-value '},{num2str(P.raac)}); disp(str);
-str = strcat({'R_CFC is '},{num2str(XX.rcfc)},{' with p-value '},{num2str(P.rcfc)}); disp(str);
 xlim([8,10])
 
 figure(2)
@@ -119,9 +112,6 @@ plot([8,8.1],[-.04,-.04],'k','LineWidth',2)
 legend('V_{low}','V_{high}')
 axis off
 set(gca,'FontSize',13)
-str = strcat({'R_PAC is '},{num2str(XX.rpac)},{' with p-value '},{num2str(P.rpac)}); disp(str);
-str = strcat({'R_AAC is '},{num2str(XX.raac)},{' with p-value '},{num2str(P.raac)}); disp(str);
-str = strcat({'R_CFC is '},{num2str(XX.rcfc)},{' with p-value '},{num2str(P.rcfc)}); disp(str);
 xlim([8,10])
 
 figure(2)
