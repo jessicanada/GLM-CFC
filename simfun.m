@@ -1,26 +1,28 @@
 function [XX,P,Vlo,Vhi,t] = simfun(pac_mod,aac_mod,sim_method,pval,varargin)
 %INPUTS:
-% modulation_level:  Value of modulation strength in [0,1]
-% threshold:         Thresholding value in [0,1], e.g. .75 means only the top 25% highest amplitudes are modulated
-% sim_method:        set to "new" to simulate CFC using a new method.
-% varargin:          optional quantile to fit AmpLO only over a range of ALOW values
-%
-%EXAMPLES TO RUN CODE:
-%
-% Ex: To call with all original settings:
-% >> simfun(1,0,[]);
-%
-% Ex: To call with all original settings and varargin to specify AmpLO:
-%
-% >> simfun(1,0,[],0.05);
-%
-% Ex: To call with glm simulation method:
-% >> simfun(1,0,'new');
+% pac_mod:          Intensity of PAC (I_PAC in paper)
+% aac_mod:          Intensity of AAC (I_AAC in paper)
+% sim_method:       'GLM' creates coupled signals with a GLM approach,
+%                   'pink' creates coupled signals by filtering pink noise
+% pval:          	'theoretical' gives analytic p-values for R
+%                   'empirical' gives bootstrapped p-values for R
+% varargin:         optionally, include the parameter q indicating which quantiles
+%                   of AmpLo you'd like to fit over
 
 %OUTPUTS:
-% XX.rpac: R_PAC value, confidence intervals XX.rPAC_CI
-% XX.raac: R_AAC value, confidence intervals XX.rAAC_CI
-% XX.rcfc: R_CFC value, confidence intervals XX.rCFC_CI
+% XX.rpac:      R_PAC value, confidence intervals XX.rPAC_CI
+% XX.raac:      R_AAC value, confidence intervals XX.rAAC_CI
+% XX.rcfc:      R_CFC value, confidence intervals XX.rCFC_CI
+% XX.null:      3D surface for null model in Phi_low, A_low, A_high space
+% XX.PAC:       3D surface for PAC model in Phi_low, A_low, A_high space
+% XX.AAC:       3D surface for AAC model in Phi_low, A_low, A_high space
+% XX.CFC:       3D surface for CFC model in Phi_low, A_low, A_high space
+% P.rpac:       p-value for RPAC statistic
+% P.raac:       p-value for RAAC statistic
+% P.rcfc:       p-value for RCFC statistic
+% Vlo:          simulated low-frequency signal
+% Vhi:          simulated high-frequency signal
+% t:            time
 
 dt = 0.002;  Fs = 1/dt;  fNQ = Fs/2;        % Simulated time series parameters.
 N  = 20/dt+4000;                            % # steps to simulate, making the duration 20s
@@ -61,8 +63,6 @@ Vhi = Vhi(2001:end-2000);
 t   = (1:length(Vlo))*dt;
 N   = length(Vlo);
 
-maxamp = max(abs(hilbert(Vhi)));
-
 % Find peaks of the low freq activity.
 [~, ipks] = findpeaks(Vlo);
 AmpLo = abs(hilbert(Vlo));
@@ -76,17 +76,15 @@ end
 s = s/max(s);                                       % Normalize so it falls between 0 and 1
 
 if exist('sim_method','var') && strcmp(sim_method, 'GLM')
-    Ahi = (1+pac_mod*s)';                  % Define Ahi.
+    Ahi = (1+pac_mod*s)';                           % Define Ahi.
     Vhi = (0.01* Ahi .* cos(angle(hilbert(Vhi'))))';% ... and use PhiHi to get Vhi.
 elseif exist('sim_method','var') && strcmp(sim_method, 'pink')
-    Vhi = Vhi.*(1+pac_mod*s);              % Modulate high freq activity by modulation envelope.
+    Vhi = Vhi.*(1+pac_mod*s);                       % Modulate high freq activity by modulation envelope.
 else
     return
 end
 
 Vhi = Vhi.*(1+aac_mod*AmpLo/max(AmpLo));
-
-nCtlPts = 10;
 
 Vpink2 = make_pink_noise(1,N,dt);                   % Create additional pink noise signal
 noise_level = 0.01;
