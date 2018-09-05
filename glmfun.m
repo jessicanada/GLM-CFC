@@ -2,7 +2,6 @@ function [XX,P] = glmfun(Vlo, Vhi,pval,ci,varargin)
 %INPUTS:
 % Vlo:                   Low frequency signal
 % Vhi:                   High frequency signal
-% nCtlPts:               number of control points, for spline phase
 % pval:                  'theoretical' gives analytic p-values for R
 %                        'empirical' gives bootstrapped p-values for R
 % ci:                    'ci' gives confidence intervals, 'none' gives no confidence intervals
@@ -18,6 +17,8 @@ function [XX,P] = glmfun(Vlo, Vhi,pval,ci,varargin)
 % XX.PAC:       3D surface for PAC model in Phi_low, A_low, A_high space
 % XX.AAC:       3D surface for AAC model in Phi_low, A_low, A_high space
 % XX.CFC:       3D surface for CFC model in Phi_low, A_low, A_high space
+% XX.ampAXIS    axis for the low frequency amplitude, for plotting
+% XX.phi0       axis for the low frequency phase, for plotting
 % P.rpac:       p-value for RPAC statistic
 % P.raac:       p-value for RAAC statistic
 % P.rcfc:       p-value for RCFC statistic
@@ -44,7 +45,7 @@ function [XX,P] = glmfun(Vlo, Vhi,pval,ci,varargin)
   
   %Chi^2 test between nested models (theoretical p-values)
   chi0 = 1-chi2cdf(dev0-dev3,12);
-  chi1 = 1-chi2cdf(dev1-dev3,3); %Between PAC and PACAAC Model, if low AAC is present
+  chi1 = 1-chi2cdf(dev1-dev3,3);  %Between PAC and PACAAC Model, if low AAC is present
   chi2 = 1-chi2cdf(dev2-dev3,11); %Between AAC and PACAAC Model, if low PAC is present
   
  %create 3d model surfaces
@@ -62,7 +63,7 @@ function [XX,P] = glmfun(Vlo, Vhi,pval,ci,varargin)
       [splineC, ~, ~] = glmval(bC,YC,'log',statsC,'constant', 'off');   %null
       [spline1, ~, ~] = glmval(b1,Y1,'log',stats1,'constant', 'off');   %PAC
       count = 1;
-      for i = 1:100:length(ampSORT)                                       %fit model over values of Alow
+      for i = 1:100:length(ampSORT)                                     %fit model over values of Alow
           Y3 = [Y1,ampSORT(i)*ones(size(phi0))',ampSORT(i)*sin(phi0'),ampSORT(i)*cos(phi0')];        %CFC model, function of phiLo, ampLo, phiLo*ampLo
           [spline3, ~, ~] = glmval(b3,Y3,'log',stats3,'constant', 'off');
           XX3(:,count) = spline3;
@@ -70,16 +71,16 @@ function [XX,P] = glmfun(Vlo, Vhi,pval,ci,varargin)
           count = count+1;
       end
       L = length(1:100:length(ampSORT));
-      XX1 = repmat(spline1,1,L); %PAC model constant in PhiLow dimension
-      XXC = repmat(splineC,1,L); %null model constant in PhiLow, Alow dimensions
+      XX1 = repmat(spline1,1,L);                                        %PAC model constant in PhiLow dimension
+      XXC = repmat(splineC,1,L);                                        %null model constant in PhiLow, Alow dimensions
       temp = ampSORT(1:100:end);
       Y2 = [ones(size(temp')),temp'];
-      [spline2,~,~] = glmval(b2,Y2,'log',stats2,'constant','off'); %AAC model, function of Alow
-      Xtemp = repmat(spline2,1,100);                                         %AAC model constant in PhiLow dimension
+      [spline2,~,~] = glmval(b2,Y2,'log',stats2,'constant','off');      %AAC model, function of Alow
+      Xtemp = repmat(spline2,1,100);                                    %AAC model constant in PhiLow dimension
       
-      XX.AAC = Xtemp'; XX.null = XXC; XX.PAC = XX1;XX.CFC = XX3;          %3D model surfaces
+      XX.AAC = Xtemp'; XX.null = XXC; XX.PAC = XX1;XX.CFC = XX3;        %3D model surfaces
          
-      XX.ampAXIS = ampAXIS; XX.phi0 = phi0;     %axes
+      XX.ampAXIS = ampAXIS; XX.phi0 = phi0;                             %axes
       XX.rpac = max(max((abs(1-XX1./XXC))));
       XX.raac = max(max((abs(1-Xtemp'./XXC))));
       XX.rcfc = max(max((abs(1-XX3./XXC))));
