@@ -1,11 +1,11 @@
 % Note: the following simulations use a GLM-based method to simulate V_low
 % and V_high, and the p-values are the analytical p-values from the
-% manuscript
+% manuscript.
 
 %% Signal with neither PAC nor AAC
 
 [XX,P,Vlo,Vhi,t] = simfun(0,0,'GLM','theoretical',.05);
-figure(1)
+figure(1); clf
 plot(t,Vlo + .08,t,Vhi,'LineWidth',2); axis off
 hold on;
 [pks, ipks] = findpeaks(Vlo);
@@ -22,7 +22,7 @@ str = strcat({'R_AAC is '},{num2str(XX.raac)},{' with p-value '},{num2str(P.raac
 str = strcat({'R_CFC is '},{num2str(XX.rcfc)},{' with p-value '},{num2str(P.rcfc)}); disp(str);
 xlim([8,10])
 
-figure(2)
+figure(2); clf
 surf(XX.ampAXIS,XX.phi0,XX.PAC,'EdgeColor','none','FaceAlpha',.8,'FaceColor',[35, 106, 185]/255);
 hold on;
 surf(XX.ampAXIS,XX.phi0,XX.AAC,'EdgeColor','none','FaceAlpha',.8,'FaceColor',[214, 26, 70]/255);
@@ -39,7 +39,7 @@ zlim([.008,.02])
 %% Signal with PAC
 
 [XX,P,Vlo,Vhi,t] = simfun(1,0,'GLM','theoretical',.05);
-figure(1)
+figure(1); clf
 plot(t,Vlo + .08,t,Vhi,'LineWidth',2); axis off
 hold on;
 [pks, ipks] = findpeaks(Vlo);
@@ -56,7 +56,7 @@ str = strcat({'R_AAC is '},{num2str(XX.raac)},{' with p-value '},{num2str(P.raac
 str = strcat({'R_CFC is '},{num2str(XX.rcfc)},{' with p-value '},{num2str(P.rcfc)}); disp(str);
 xlim([8,10])
 
-figure(2)
+figure(2); clf
 surf(XX.ampAXIS,XX.phi0,XX.PAC,'EdgeColor','none','FaceAlpha',.8,'FaceColor',[35, 106, 185]/255);
 hold on;
 surf(XX.ampAXIS,XX.phi0,XX.AAC,'EdgeColor','none','FaceAlpha',.8,'FaceColor',[214, 26, 70]/255);
@@ -73,7 +73,7 @@ zlim([.008,.02])
 %% Signal with AAC
 
 [XX,P,Vlo,Vhi,t] = simfun(0,1,'GLM','theoretical',.05);
-figure(1)
+figure(1); clf
 plot(t,Vlo + .08,t,Vhi,'LineWidth',2); axis off
 hold on;
 [pks, ipks] = findpeaks(Vlo);
@@ -90,7 +90,7 @@ str = strcat({'R_AAC is '},{num2str(XX.raac)},{' with p-value '},{num2str(P.raac
 str = strcat({'R_CFC is '},{num2str(XX.rcfc)},{' with p-value '},{num2str(P.rcfc)}); disp(str);
 xlim([8,10])
 
-figure(2)
+figure(2); clf
 surf(XX.ampAXIS,XX.phi0,XX.PAC,'EdgeColor','none','FaceAlpha',.8,'FaceColor',[35, 106, 185]/255);
 hold on;
 surf(XX.ampAXIS,XX.phi0,XX.AAC,'EdgeColor','none','FaceAlpha',.8,'FaceColor',[214, 26, 70]/255);
@@ -107,7 +107,7 @@ zlim([.008,.02])
 %% Signal with PAC and AAC
 
 [XX,P,Vlo,Vhi,t] = simfun(1,1,'GLM','theoretical',.05);
-figure(1)
+figure(1); clf
 plot(t,Vlo + .08,t,Vhi,'LineWidth',2); axis off
 hold on;
 [pks, ipks] = findpeaks(Vlo);
@@ -124,7 +124,7 @@ str = strcat({'R_AAC is '},{num2str(XX.raac)},{' with p-value '},{num2str(P.raac
 str = strcat({'R_CFC is '},{num2str(XX.rcfc)},{' with p-value '},{num2str(P.rcfc)}); disp(str);
 xlim([8,10])
 
-figure(2)
+figure(2); clf
 surf(XX.ampAXIS,XX.phi0,XX.PAC,'EdgeColor','none','FaceAlpha',.8,'FaceColor',[35, 106, 185]/255);
 hold on;
 surf(XX.ampAXIS,XX.phi0,XX.AAC,'EdgeColor','none','FaceAlpha',.8,'FaceColor',[214, 26, 70]/255);

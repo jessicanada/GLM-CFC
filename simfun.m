@@ -17,6 +17,8 @@ function [XX,P,Vlo,Vhi,t] = simfun(pac_mod,aac_mod,sim_method,pval,varargin)
 % XX.PAC:       3D surface for PAC model in Phi_low, A_low, A_high space
 % XX.AAC:       3D surface for AAC model in Phi_low, A_low, A_high space
 % XX.CFC:       3D surface for CFC model in Phi_low, A_low, A_high space
+% XX.ampAXIS    axis for the low frequency amplitude, for plotting
+% XX.phi0       axis for the low frequency phase, for plotting
 % P.rpac:       p-value for RPAC statistic
 % P.raac:       p-value for RAAC statistic
 % P.rcfc:       p-value for RCFC statistic
@@ -101,7 +103,7 @@ trans          = 0.15;                      % fractional width of transition zon
 f=[MINFREQ (1-trans)*locutoff/fNQ locutoff/fNQ hicutoff/fNQ (1+trans)*hicutoff/fNQ 1];
 m=[0       0                      1            1            0                      0];
 filtwts = firls(filtorder,f,m);             % get FIR filter coefficients
-Vlo = filtfilt(filtwts,1,V1);            % Define low freq band activity.
+Vlo = filtfilt(filtwts,1,V1);               % Define low freq band activity.
 
 % Filter into high freq band.
 locutoff = 100;                             % High freq passband = [100, 140] Hz.
@@ -112,7 +114,7 @@ trans          = 0.15;                      % fractional width of transition zon
 f=[MINFREQ (1-trans)*locutoff/fNQ locutoff/fNQ hicutoff/fNQ (1+trans)*hicutoff/fNQ 1];
 m=[0       0                      1            1            0                      0];
 filtwts = firls(filtorder,f,m);             % get FIR filter coefficients
-Vhi = filtfilt(filtwts,1,V1);            % Define high freq band activity.
+Vhi = filtfilt(filtwts,1,V1);               % Define high freq band activity.
 
 if isempty(varargin)
     [XX,P] = glmfun(Vlo, Vhi, pval);
@@ -125,8 +127,6 @@ end
 
 function [x1new] = make_pink_noise(alpha,L,dt)
 
-  %alpha=0.33;
-
   x1 = randn(L,1);
   xf1 = fft(x1);
   A = abs(xf1);
@@ -134,7 +134,7 @@ function [x1new] = make_pink_noise(alpha,L,dt)
 
   df = 1.0 / (dt*length(x1));
   faxis = (0:length(x1)/2)*df;
-  faxis = [faxis, faxis(end-1:-1:2)];  %(end-1:-1:2)
+  faxis = [faxis, faxis(end-1:-1:2)];
   oneOverf = 1.0 ./ faxis.^alpha;
   oneOverf(1)=0.0;
 
