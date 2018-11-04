@@ -1,4 +1,4 @@
-function [XX,P,Vlo,Vhi,t] = simfun(pac_mod,aac_mod,sim_method,pval,ci,varargin)
+function [XX,P,Vlo,Vhi,t] = simfun(pac_mod,aac_mod,sim_method,pval,varargin)
 %INPUTS:
 % pac_mod:          Intensity of PAC (I_PAC in paper)
 % aac_mod:          Intensity of AAC (I_AAC in paper)
@@ -6,8 +6,6 @@ function [XX,P,Vlo,Vhi,t] = simfun(pac_mod,aac_mod,sim_method,pval,ci,varargin)
 %                   'pink' creates coupled signals by filtering pink noise
 % pval:          	'theoretical' gives analytic p-values for R
 %                   'empirical' gives bootstrapped p-values for R
-% ci:               'ci' gives confidence intervals for R
-%                   'none' gives no confidence intervals (faster)
 % varargin:         optionally, include the parameter q indicating which quantiles
 %                   of AmpLo you'd like to fit over
 
@@ -115,12 +113,19 @@ f=[MINFREQ (1-trans)*locutoff/fNQ locutoff/fNQ hicutoff/fNQ (1+trans)*hicutoff/f
 m=[0       0                      1            1            0                      0];
 filtwts = firls(filtorder,f,m);             % get FIR filter coefficients
 Vhi = filtfilt(filtwts,1,V1);            % Define high freq band activity.
-
+if elseif exist('sim_method','var') && strcmp(sim_method, 'pink')
 if isempty(varargin)
-    [XX,P] = glmfun(Vlo, Vhi, pval,ci);
+    [XX,P] = glmfun(Vlo, Vhi, pval);
 else
     q = varargin{1};
-    [XX,P] = glmfun(Vlo, Vhi, pval,ci,q);
+    [XX,P] = glmfun(Vlo, Vhi, pval,q);
+end
+
+if isempty(varargin)
+    [XX,P] = glmfun(Vlo, Vhi, pval);
+else
+    q = varargin{1};
+    [XX,P] = glmfun(Vlo, Vhi, pval,q);
 end
 
 end
