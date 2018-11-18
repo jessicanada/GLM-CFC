@@ -10,7 +10,7 @@ function [XX,P,Vlo,Vhi,t] = simfun(pac_mod,aac_mod,sim_method,pval,ci,varargin)
 %                   'none' gives no confidence intervals (faster)
 % varargin:         optionally, include the parameter q indicating which quantiles
 %                   of AmpLo you'd like to fit over
-
+%
 %OUTPUTS:
 % XX.rpac:      R_PAC value, confidence intervals XX.rPAC_CI
 % XX.raac:      R_AAC value, confidence intervals XX.rAAC_CI
