@@ -15,4 +15,4 @@ L-E Martinet, A. S. Widge, S. S. Cash, U. T. Eden, M. A. Kramer, 2018.
 
 `glmfun_with_indicator`: an example of how to update glmfun to test for effect of condition (e.g. pre and post stimuli) on coupling
 
-Any questions/comments please direct to Jessica Nadalin (jnadalin@bu.edu)
+Any questions/comments please direct to Jessica Nadalin (jnadalin@bu.edu) or Mark Kramer (mak@bu.edu)
