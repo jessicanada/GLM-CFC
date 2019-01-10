@@ -4,8 +4,8 @@
 
 %% Signal with neither PAC nor AAC
 
-[XX,P,Vlo,Vhi,t] = simfun(0,0,'GLM','theoretical',.05);
-figure(1); clf
+[XX,P,Vlo,Vhi,t] = simfun(0,0,'GLM','theoretical','none',.05);
+figure(1)
 plot(t,Vlo + .08,t,Vhi,'LineWidth',2); axis off
 hold on;
 [pks, ipks] = findpeaks(Vlo);
@@ -38,8 +38,8 @@ zlim([.008,.02])
 
 %% Signal with PAC
 
-[XX,P,Vlo,Vhi,t] = simfun(1,0,'GLM','theoretical',.05);
-figure(1); clf
+[XX,P,Vlo,Vhi,t] = simfun(1,0,'GLM','theoretical','none',.05);
+figure(1)
 plot(t,Vlo + .08,t,Vhi,'LineWidth',2); axis off
 hold on;
 [pks, ipks] = findpeaks(Vlo);
@@ -72,8 +72,8 @@ zlim([.008,.02])
 
 %% Signal with AAC
 
-[XX,P,Vlo,Vhi,t] = simfun(0,1,'GLM','theoretical',.05);
-figure(1); clf
+[XX,P,Vlo,Vhi,t] = simfun(0,1,'GLM','theoretical','none',.05);
+figure(1)
 plot(t,Vlo + .08,t,Vhi,'LineWidth',2); axis off
 hold on;
 [pks, ipks] = findpeaks(Vlo);
@@ -106,8 +106,8 @@ zlim([.008,.02])
 
 %% Signal with PAC and AAC
 
-[XX,P,Vlo,Vhi,t] = simfun(1,1,'GLM','theoretical',.05);
-figure(1); clf
+[XX,P,Vlo,Vhi,t] = simfun(1,1,'GLM','theoretical','none',.05);
+figure(1)
 plot(t,Vlo + .08,t,Vhi,'LineWidth',2); axis off
 hold on;
 [pks, ipks] = findpeaks(Vlo);

@@ -8,7 +8,6 @@ function [XX,P] = glmfun(Vlo, Vhi,pval,ci,varargin)
 % varargin:              optionally, include the parameter q indicating which quantiles
 %                        of AmpLo you'd like to fit over
 
-
 %OUTPUTS:
 % XX.rpac:      R_PAC value, confidence intervals XX.rPAC_CI
 % XX.raac:      R_AAC value, confidence intervals XX.rAAC_CI
@@ -100,6 +99,11 @@ function [XX,P] = glmfun(Vlo, Vhi,pval,ci,varargin)
   end
   
   if exist('ci','var') && strcmp(ci, 'ci')
+        phi0 = linspace(-pi,pi,100);
+        X0 = spline_phase0(phi0',nCtlPts);
+        Amax = max(ampSORT); Amin = min(ampSORT); stepsize = (Amax-Amin)/99;
+        X2eval = Amin:stepsize:Amax; %evaluate on all amplitudes
+        X2eval = [ones(size(phi0))',X2eval'];
       %Determine CI for the measure RPAC.
       M = 10000;
       bMC = b1*ones(1,M) + sqrtm(stats1.covb)*normrnd(0,1,nCtlPts,M);
@@ -109,7 +113,7 @@ function [XX,P] = glmfun(Vlo, Vhi,pval,ci,varargin)
           mx(k) = max(abs(1-splineMC(:,k)./splineC));
       end
       r_CI = quantile(mx, [0.025, 0.975]);
-      XX.rPAC_CI = r_CI;
+      XX.rpac_ci = r_CI;
 
       %and for rAAC
       M = 10000;
@@ -120,11 +124,11 @@ function [XX,P] = glmfun(Vlo, Vhi,pval,ci,varargin)
           mx(k) = max(abs(1-splineMC(:,k)./splineC));
       end
       r2_CI = quantile(mx, [0.025, 0.975]);
-      XX.rAAC_CI = r2_CI;
+      XX.raac_ci = r2_CI;
 
       %and for rCFC
       M = 10000;
-      [m,~] = max(abs(1-XX.PACAAC./XX.null)); %find point of maximum distance between null, CFC models
+      [m,~] = max(abs(1-XX3./XXC)); %find point of maximum distance between null, CFC models
       [~,j] = max(m);                         %j ampLO, I(j) phiLO
       bMC = b3*ones(1,M) + sqrtm(stats3.covb)*normrnd(0,1,nCtlPts+3,M);
       Y1 = spline_phase0(phi0',nCtlPts); %model 1, function of phiLo
@@ -136,7 +140,7 @@ function [XX,P] = glmfun(Vlo, Vhi,pval,ci,varargin)
           mx(k) = max(abs(1-splineMC(:,k)./splineC));
       end
       r3_CI = quantile(mx, [0.025, 0.975]);
-      XX.rCFC_CI = r3_CI;
+      XX.rcfc_ci = r3_CI;
   end
 
 end
