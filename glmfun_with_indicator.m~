@@ -44,8 +44,8 @@ function [XX,P,I] = glmfun_with_indicator(Vlo_pre,Vlo_post,Vhi_pre,Vhi_post,pval
   X1 = spline_phase0(phi',nCtlPts);                                         %low frequency phase
   X2 = [ones(size(Y)),ampLO];                                              %low frequency amplitude
   X3 = [X1,ampLO,sin(phi).*ampLO,cos(phi).*ampLO];                     %low frequency phase, low frequency amplitude, interaction terms
-  X4 = [X3,X1.*POST];
-  %X4 = [X3, sin(phi).*POST,cos(phi).*POST];
+  %X4 = [X3,X1.*POST];
+  X4 = [X3, sin(phi).*POST,cos(phi).*POST];
   XC = ones(size(Y));                                                       %ones (null)
 
   %Perform GLM.
@@ -59,7 +59,7 @@ function [XX,P,I] = glmfun_with_indicator(Vlo_pre,Vlo_post,Vhi_pre,Vhi_post,pval
   chi0 = 1-chi2cdf(dev0-dev3,12);
   chi1 = 1-chi2cdf(dev1-dev3,3); %Between PAC and PACAAC Model, if low AAC is present
   chi2 = 1-chi2cdf(dev2-dev3,11); %Between AAC and PACAAC Model, if low PAC is present
-  chi3 = 1-chi2cdf(dev3-dev4,10);
+  %chi3 = 1-chi2cdf(dev3-dev4,10);
   %chi3 = 1-chi2cdf(dev3-dev4,2);
   
   I.pval = chi3;

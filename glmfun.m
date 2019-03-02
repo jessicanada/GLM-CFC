@@ -79,15 +79,22 @@ function [XX,P] = glmfun(Vlo, Vhi,pval,ci,varargin)
       XX.AAC = Xtemp'; XX.null = XXC; XX.PAC = XX1;XX.CFC = XX3;          %3D model surfaces
          
       XX.ampAXIS = ampAXIS; XX.phi0 = phi0;     %axes
+
       XX.rpac = max(max((abs(1-XX1./XXC))));
+      XX.rpac_new = max(max(abs(1-Xtemp'./XX3)));
+
       XX.raac = max(max((abs(1-Xtemp'./XXC))));
+      XX.raac_new = max(max((abs(1-XX1./XX3))));
+
       XX.rcfc = max(max((abs(1-XX3./XXC))));
 
   
   if exist('pval','var') && strcmp(pval, 'empirical')
     M = minvals(Vlo,Vhi); %find empirical p-values
     P.rpac = max(.5,length(find(M.rpac>XX.rpac)))/length(M.rpac);
+    P.rpac_new = max(.5,length(find(M.rpac_new>XX.rpac_new)))/length(M.rpac_new);
     P.raac = max(.5,length(find(M.raac>XX.raac)))/length(M.raac);
+    P.raac_new = max(.5,length(find(M.raac_new>XX.raac_new)))/length(M.raac_new);
     P.rcfc = max(.5,length(find(M.rcfc>XX.rcfc)))/length(M.rcfc);
   elseif exist('pval','var') && strcmp(pval, 'theoretical')
     P.rpac = chi2;  %use theoretical p-values
@@ -147,16 +154,18 @@ end
 % Bootstrapped p-values
 function M = minvals(Vlo,Vhi)
     K = 100;
-    RPAC = zeros(1,K); RCFC = zeros(1,K); RAAC = zeros(1,K);
+    RPAC = zeros(1,K); RCFC = zeros(1,K); RAAC = zeros(1,K); RPAC_new = zeros(1,K); RAAC_new = zeros(1,K);
     N = zeros(1,K); L = zeros(1,K);
     for i = 1:K
         Vhi_prime = AAFT(Vhi,1);
         [XX] = glmfun(Vlo,Vhi_prime','none');        %compute R statistics between Vhi and shifted Vlo
         RPAC(i) = XX.rpac;
+        RPAC_new(i) = XX.rpac_new;
         RCFC(i) = XX.rcfc;
         RAAC(i) = XX.raac;
+        RAAC_new(i) = XX.raac_new;
     end
-    M.rpac = RPAC; M.rcfc = RCFC; M.raac = RAAC; M.shiftN = N; M.shiftL = L;
+    M.rpac = RPAC; M.rcfc = RCFC; M.raac = RAAC; M.rpac_new = RPAC_new; M.raac_new = RAAC_new; M.shiftN = N; M.shiftL = L;
 end
 
 % Generate a design matrix X (n by nCtlPts) for a phase signal (n by 1)

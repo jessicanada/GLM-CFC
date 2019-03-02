@@ -1,21 +1,15 @@
-function [XX,P,I] = glmfun_with_indicator(Vlo_pre,Vlo_post,Vhi_pre,Vhi_post,pval,ci,varargin)
-% a modification of glmfun, allowing the user to include an indicator
-% function to the model, differentiating between a 'pre' and 'post'
-% condition (e.g. before and after stimulus, with or without drug), to test
-% for the effect of condition on PAC
-%
-% INPUTS:
-% Vlo_pre:                    Low frequency signal from 'pre' condition
-% Vhi_pre:                    High frequency signal from 'pre' condition
-% Vlo_post:                   Low frequency signal from 'post' condition
-% Vhi_post:                   High frequency signal from 'post' condition
-% pval:                       'theoretical' gives analytic p-values for R
-%                             'empirical' gives bootstrapped p-values for R
-% ci:                         'ci' gives confidence intervals, 'none' gives no confidence intervals
-% varargin:                   optionally, include the parameter q indicating which quantiles
-%                             of AmpLo you'd like to fit over
-%
-% OUTPUTS:
+function [XX,P] = glm_rsquared(Vlo, Vhi,pval,ci,varargin)
+%INPUTS:
+% Vlo:                   Low frequency signal
+% Vhi:                   High frequency signal
+% nCtlPts:               number of control points, for spline phase
+% pval:                  'theoretical' gives analytic p-values for R
+%                        'empirical' gives bootstrapped p-values for R
+% ci:                    'ci' gives confidence intervals, 'none' gives no confidence intervals
+% varargin:              optionally, include the parameter q indicating which quantiles
+%                        of AmpLo you'd like to fit over
+
+%OUTPUTS:
 % XX.rpac:      R_PAC value, confidence intervals XX.rPAC_CI
 % XX.raac:      R_AAC value, confidence intervals XX.rAAC_CI
 % XX.rcfc:      R_CFC value, confidence intervals XX.rCFC_CI
@@ -26,26 +20,19 @@ function [XX,P,I] = glmfun_with_indicator(Vlo_pre,Vlo_post,Vhi_pre,Vhi_post,pval
 % P.rpac:       p-value for RPAC statistic
 % P.raac:       p-value for RAAC statistic
 % P.rcfc:       p-value for RCFC statistic
-% I.pval:       p-value for indicator variable: low value implies significant effect of
-%               indicator on PAC
-% I.beta:       output beta values from full model including indicator
-%               variable
       
   nCtlPts = 10;
-  
+
   %Compute phase and amplitude.
-  phi = [angle(hilbert(Vlo_pre));angle(hilbert(Vlo_post))];
-  amp = [abs(hilbert(Vhi_pre));abs(hilbert(Vhi_post))];
-  ampLO = [abs(hilbert(Vlo_pre)); abs(hilbert(Vlo_post))];
-  POST = [zeros(size(Vlo_pre)); ones(size(Vlo_post))];
+  phi = angle(hilbert(Vlo));
+  amp = abs(hilbert(Vhi));
+  ampLO = abs(hilbert(Vlo));
   
   %Define variables for GLM procedure.
-  Y = amp;                                                                 %high frequency amplitude
+  Y = amp';                                                                 %high frequency amplitude
   X1 = spline_phase0(phi',nCtlPts);                                         %low frequency phase
-  X2 = [ones(size(Y)),ampLO];                                              %low frequency amplitude
-  X3 = [X1,ampLO,sin(phi).*ampLO,cos(phi).*ampLO];                     %low frequency phase, low frequency amplitude, interaction terms
-  X4 = [X3,X1.*POST];
-  %X4 = [X3, sin(phi).*POST,cos(phi).*POST];
+  X2 = [ones(size(Y)),ampLO'];                                              %low frequency amplitude
+  X3 = [X1,ampLO',sin(phi').*ampLO',cos(phi').*ampLO'];                     %low frequency phase, low frequency amplitude, interaction terms
   XC = ones(size(Y));                                                       %ones (null)
 
   %Perform GLM.
@@ -53,17 +40,11 @@ function [XX,P,I] = glmfun_with_indicator(Vlo_pre,Vlo_post,Vhi_pre,Vhi_post,pval
   [b2,  dev2, stats2] = glmfit(X2, Y, 'gamma','link','log','constant','off');       %AAC
   [b3,  dev3, stats3] = glmfit(X3, Y, 'gamma','link','log','constant','off');       %CFC
   [bC, dev0, statsC] = glmfit(XC, Y, 'gamma', 'link', 'log', 'constant', 'off');    %null
-  [b4, dev4, stats4] = glmfit(X4, Y, 'gamma', 'link', 'log', 'constant', 'off');
   
   %Chi^2 test between nested models (theoretical p-values)
   chi0 = 1-chi2cdf(dev0-dev3,12);
   chi1 = 1-chi2cdf(dev1-dev3,3); %Between PAC and PACAAC Model, if low AAC is present
   chi2 = 1-chi2cdf(dev2-dev3,11); %Between AAC and PACAAC Model, if low PAC is present
-  chi3 = 1-chi2cdf(dev3-dev4,10);
-  %chi3 = 1-chi2cdf(dev3-dev4,2);
-  
-  I.pval = chi3;
-  I.beta = b4;
   
  %create 3d model surfaces
       phi0 = linspace(-pi,pi,100);
@@ -73,7 +54,7 @@ function [XX,P,I] = glmfun_with_indicator(Vlo_pre,Vlo_post,Vhi_pre,Vhi_post,pval
           ind = find(ampLO>quantile(ampLO,q) & ampLO<quantile(ampLO,1-q));
           ampSORT = sort(ampLO(ind));
       end
-      XXC = []; XX1 = []; XX2 = []; XX3 = [];
+      XX3 = [];
       ampAXIS = [];
       YC = ones(size(phi0));                                            %null model
       Y1 = spline_phase0(phi0',nCtlPts);                                %PAC model, function of phiLo
@@ -84,23 +65,28 @@ function [XX,P,I] = glmfun_with_indicator(Vlo_pre,Vlo_post,Vhi_pre,Vhi_post,pval
           Y3 = [Y1,ampSORT(i)*ones(size(phi0))',ampSORT(i)*sin(phi0'),ampSORT(i)*cos(phi0')];        %CFC model, function of phiLo, ampLo, phiLo*ampLo
           [spline3, ~, ~] = glmval(b3,Y3,'log',stats3,'constant', 'off');
           XX3(:,count) = spline3;
-          ampAXIS(count) = ampSORT(i);
           count = count+1;
       end
       L = length(1:100:length(ampSORT));
-      XX1 = repmat(spline1,1,L); %PAC model constant in PhiLow dimension
-      XXC = repmat(splineC,1,L); %null model constant in PhiLow, Alow dimensions
       temp = ampSORT(1:100:end);
-      Y2 = [ones(size(temp)),temp];
-      [spline2,~,~] = glmval(b2,Y2,'log',stats2,'constant','off'); %AAC model, function of Alow
-      Xtemp = repmat(spline2,1,100);                                         %AAC model constant in PhiLow dimension
+      Y2 = [ones(size(temp')),temp'];
+      [spline2,~,~] = glmval(b2,Y2,'log',stats2,'constant','off'); %AAC model, function of Alo
       
-      XX.AAC = Xtemp'; XX.null = XXC; XX.PAC = XX1;XX.CFC = XX3;          %3D model surfaces
-         
-      XX.ampAXIS = ampAXIS; XX.phi0 = phi0;     %axes
-      XX.rpac = max(max((abs(1-XX1./XXC))));
-      XX.raac = max(max((abs(1-Xtemp'./XXC))));
-      XX.rcfc = max(max((abs(1-XX3./XXC))));
+      P = repmat(phi0',1,length(phi));
+      [~,min_phi_ind] = min(abs(P-phi));
+      
+      A = repmat(temp',1,length(ampLO));
+      [~,min_amp_ind] = min(abs(A-ampLO));
+      
+      amp_est_PAC = spline1(min_phi_ind);
+      XX.rpac_new = 1-(norm(amp-amp_est_PAC',2)^2)/(norm(amp-mean(amp),2)^2);
+      
+      amp_est_AAC = spline2(min_amp_ind);
+      XX.raac_new = 1-(norm(amp-amp_est_AAC',2)^2)/(norm(amp-mean(amp),2)^2);
+     
+      CFC_ind = sub2ind(size(XX3),min_phi_ind,min_amp_ind);
+      amp_est_CFC = XX3(CFC_ind);
+      XX.rcfc_new = 1-(norm(amp-amp_est_CFC,2)^2)/(norm(amp-mean(amp),2)^2);
 
   
   if exist('pval','var') && strcmp(pval, 'empirical')
