@@ -1,5 +1,6 @@
 addpath('new')
 addpath('Chaotic Systems Toolbox')
+addpath('compare_to_MI')
 
 % Example to show where GLM outperforms MI. In this example, we'll generate the 
 fixed_val = -1;
