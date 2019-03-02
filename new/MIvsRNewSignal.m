@@ -1,3 +1,5 @@
+addpath('new')
+
 % Example to show where GLM outperforms MI. In this example, we'll generate the 
 fixed_val = -1;
 CFC_strength   = (0:.1:1);        % This controls "strength" of PAC.
