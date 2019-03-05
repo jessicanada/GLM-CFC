@@ -1,4 +1,5 @@
-addpath('new')
+%addpath('new')
+addpath('/projectnb/ecog/jessica/GLM-CFC')
 addpath('Chaotic Systems Toolbox')
 
 PAC_mod = 0:0.05:.5;
