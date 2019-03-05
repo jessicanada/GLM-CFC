@@ -1,3 +1,6 @@
+addpath('new')
+addpath('Chaotic Systems Toolbox')
+
 PAC_mod = 0:0.05:.5;
 J = 1000;
 rcfc = zeros(length(PAC_mod),J); rpac = zeros(length(PAC_mod),J);
@@ -93,9 +96,12 @@ for j = 1:J
 
 
         [XX1,P1] = glmfun(Vlo, Vhi, 'empirical','none',.05);
-        rcfc(i,j) = XX1.rcfc; rpac(i,j) = XX1.rpac;
-        p_rcfc(i,j) = P1.rcfc; p_rpac(i,j) = P1.rpac;
+        rcfc(i,j) = XX1.rcfc; rpac(i,j) = XX1.rpac; rpac_new = XX1.rpac_new;
+        p_rcfc(i,j) = P1.rcfc; p_rpac(i,j) = P1.rpac; p_rpac_new = P1.rpac_new;
         [MI1,p_MI1] = modulation_index(Vlo,Vhi,'pvals');
         mi(i,j) = MI1; p_mi(i,j) = p_MI1;
     end
 end
+
+strname = ['R_MI_Comparison_Weak_Coupling'];
+save(strname)

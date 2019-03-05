@@ -34,13 +34,14 @@ i_CFC
     
 end
 
+%
 strname = ['R_MI_Comparison_New_R_Definition'];
 save(strname)
 
 % %%
 % %load('R_MI_Comparison_Empirical')
-% sig_MI = zeros(1,11); sig_CFC = zeros(1,11); sig_PAC = zeros(1,11);
-% for i = 1:11
+% sig_MI = zeros(1,length(CFC_strength)); sig_CFC = zeros(1,length(CFC_strength)); sig_PAC = zeros(1,length(CFC_strength));
+% for i = 1:length(CFC_strength)
 %     ind1 = find(p_mi(i,:)<.05);
 %     sig_MI(i) = length(ind1);
 %     ind2 = find(p_CFC(i,:)<.05);
@@ -51,9 +52,10 @@ save(strname)
 %     sig_PAC_new(i) = length(ind4);
 % end
 % %%
-% plot(CFC_strength,sig_MI,CFC_strength,sig_CFC,CFC_strength,sig_PAC,'LineWidth',2); legend('MI','CFC','PAC')
+% plot(CFC_strength,sig_MI,CFC_strength,sig_CFC,CFC_strength,sig_PAC,CFC_strength,sig_PAC_new,'LineWidth',2); legend('MI','CFC','PAC','PAC new')
 % set(gca,'FontSize',14)
 % xlabel('Intensity'); ylabel('Significant Detections')
+% 
 % %%
 % CFC_strength   = (0:.1:1);
 % x_axis = CFC_strength;
