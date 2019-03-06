@@ -1,4 +1,3 @@
-addpath('new')
 addpath('Chaotic Systems Toolbox')
 
 % Example to show where GLM outperforms MI. In this example, we'll generate the 
