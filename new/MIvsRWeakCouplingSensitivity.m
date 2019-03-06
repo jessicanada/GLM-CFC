@@ -2,9 +2,9 @@
 addpath('Chaotic Systems Toolbox')
 
 PAC_mod = 0:0.05:.5;
-J = 10;
-rcfc = zeros(length(PAC_mod),J); rpac = zeros(length(PAC_mod),J);
-p_rcfc = zeros(length(PAC_mod),J); p_rpac = zeros(length(PAC_mod),J);
+J = 100;
+rcfc = zeros(length(PAC_mod),J); rpac = zeros(length(PAC_mod),J); rpac_new = zeros(length(PAC_mod),J);
+p_rcfc = zeros(length(PAC_mod),J); p_rpac = zeros(length(PAC_mod),J); p_rpac_new = zeros(length(PAC_mod),J);
 mi = zeros(length(PAC_mod),J); p_mi = zeros(length(PAC_mod),J);
 for j = 1:J
     j
@@ -96,8 +96,8 @@ for j = 1:J
 
 
         [XX1,P1] = glmfun(Vlo, Vhi, 'empirical','none',.05);
-        rcfc(i,j) = XX1.rcfc; rpac(i,j) = XX1.rpac; rpac_new = XX1.rpac_new;
-        p_rcfc(i,j) = P1.rcfc; p_rpac(i,j) = P1.rpac; p_rpac_new = P1.rpac_new;
+        rcfc(i,j) = XX1.rcfc; rpac(i,j) = XX1.rpac; rpac_new(i,j) = XX1.rpac_new;
+        p_rcfc(i,j) = P1.rcfc; p_rpac(i,j) = P1.rpac; p_rpac_new(i,j) = P1.rpac_new;
         [MI1,p_MI1] = modulation_index(Vlo,Vhi,'pvals');
         mi(i,j) = MI1; p_mi(i,j) = p_MI1;
     end
