@@ -1,8 +1,8 @@
-addpath('new')
+%addpath('new')
 addpath('Chaotic Systems Toolbox')
 
 PAC_mod = 0:0.05:.5;
-J = 1000;
+J = 10;
 rcfc = zeros(length(PAC_mod),J); rpac = zeros(length(PAC_mod),J);
 p_rcfc = zeros(length(PAC_mod),J); p_rpac = zeros(length(PAC_mod),J);
 mi = zeros(length(PAC_mod),J); p_mi = zeros(length(PAC_mod),J);
