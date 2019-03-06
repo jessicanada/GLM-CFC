@@ -1,0 +1,10 @@
+#!/bin/bash -l
+#$ -pe omp 1
+#$ -l h_rt=100:00:00
+#$ -N test
+
+module load matlab/2018b
+
+matlab -nodisplay -singleCompThread -r "MIvsRWeakCouplingSensitivity; exit"
+#nohup matlab -nosplash -nojvm -nodesktop <MIvsRWeakCouplingSensitivity.m> output.dat &
+

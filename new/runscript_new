@@ -1,0 +1,10 @@
+#!/bin/bash -l
+#$ -pe omp 1
+#$ -l h_rt=12:00:00
+#$ -N NewSignal
+
+module load matlab/2018b
+
+matlab -nodisplay -singleCompThread -r "MIvsRNewSignal; exit"
+#nohup matlab -nosplash -nojvm -nodesktop <MIvsRWeakCouplingSensitivity.m> output.dat &
+
