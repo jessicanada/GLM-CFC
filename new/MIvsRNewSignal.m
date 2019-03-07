@@ -3,7 +3,7 @@ addpath('Chaotic Systems Toolbox')
 % Example to show where GLM outperforms MI. In this example, we'll generate the 
 fixed_val = -1;
 CFC_strength   = (0:.1:1);        % This controls "strength" of PAC.
-n_realizations = 100;            % The number of times to re-run each CFC setting.
+n_realizations = 1000;            % The number of times to re-run each CFC setting.
 
 PAC            = zeros(length(CFC_strength), n_realizations);
 PAC_new        = zeros(length(CFC_strength), n_realizations);
@@ -55,7 +55,8 @@ save(strname)
 % set(gca,'FontSize',14)
 % xlabel('Intensity'); ylabel('Significant Detections')
 % 
-% %%
+
+%%
 % CFC_strength   = (0:.1:1);
 % x_axis = CFC_strength;
 % figure;
