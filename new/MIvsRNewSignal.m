@@ -14,8 +14,8 @@ p_CFC          = zeros(length(CFC_strength), n_realizations);
 p_mi           = zeros(length(CFC_strength), n_realizations);
 p_PAC_new      = zeros(length(CFC_strength), n_realizations);
 
-for i_CFC=1:length(CFC_strength)
-i_CFC
+%for i_CFC=1:length(CFC_strength)
+i_CFC=str2num(id)
     for i_run=1:n_realizations
 
         [XX,P,Vlo,Vhi,t] = simfun_mi_vs_r(CFC_strength(i_CFC),fixed_val);
@@ -31,10 +31,11 @@ i_CFC
         
     end
     
-end
+%end
 
 %
-strname = ['R_MI_Comparison_New_R_Definition'];
+%id_name = num2str(id)
+strname = ['R_MI_Comparison_New_R_Definition_', id];
 save(strname)
 
 % %%
