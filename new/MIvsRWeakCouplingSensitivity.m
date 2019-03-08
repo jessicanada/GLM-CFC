@@ -63,7 +63,7 @@ for j = 1:J
     s = s/max(s);                                       % Normalize so it falls between 0 and 1
 
     aac_mod = 0;
-    pac_mod = PAC_mod(i);
+    pac_mod = PAC_mod(i); size(pac_mod)
     Vhi = Vhi.*(1+pac_mod*s);                       % Modulate high freq activity by modulation envelope.
     Vhi = Vhi.*(1+aac_mod*AmpLo/max(AmpLo));
 
