@@ -12,6 +12,7 @@ p_PAC = zeros(1,1000); p_AAC = zeros(1,1000); p_CFC = zeros(1,1000);
 p_PAC_new = zeros(1,1000); p_AAC_new = zeros(1,1000);
 
 i = str2num(id);
+i
 mval = MOD(i);
 
 for j = 1:1000
