@@ -1,3 +1,5 @@
+addpath('Chaotic Systems Toolbox')
+
 N = 1000;
 p_cfcdep = zeros(1,N); p_pacdep = zeros(1,N);
 p_cfcind = zeros(1,N); p_pacind = zeros(1,N);
