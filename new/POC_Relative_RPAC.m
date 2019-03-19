@@ -37,8 +37,8 @@ for j = 1:1000
 
         nCtlPts = 10;
         [XX] = glmfun(Vlo, Vhi,'none','none',.05);
-        RPAC(i) = XX.rpac; RPAC_new(i) = XX.rpac_new; RCFC(i) = XX.rcfc;
-        MI(i) = modulation_index(Vlo,Vhi,'none');
+        RPAC(j) = XX.rpac; RPAC_new(j) = XX.rpac_new; RCFC(j) = XX.rcfc;
+        MI(j) = modulation_index(Vlo,Vhi,'none');
         
 %     hold on;
 %     modulation_level = mod(i);
