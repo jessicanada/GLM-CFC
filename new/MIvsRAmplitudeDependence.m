@@ -30,15 +30,16 @@ strname = ['R_MI_Comparison_Amplitude_Dependence'];
 save(strname)
 
 % %%
+% load('R_MI_Comparison_Amplitude_Dependence')
 % %load('Amplitude_Dependence_Sim_Theoretical.mat') %thresh 9
 % %p_cfcdep = p_cfcdep(1:100); p_cfcind = p_cfcind(1:100);
-% ind_pac_dep = find(p_pacdep<.05); %35
-% ind_cfc_dep = find(p_cfcdep<.05); %42
-% ind_pac_ind = find(p_pacind<.05); %35
-% ind_cfc_ind = find(p_cfcind<.05); %39
+% ind_pac_dep = find(p_pacdep<.05); %738
+% ind_cfc_dep = find(p_cfcdep<.05); %816
+% ind_pac_ind = find(p_pacind<.05); %730
+% ind_cfc_ind = find(p_cfcind<.05); %790
 % 
-% ind_mi_dep = find(p_mi_dep<.05); %5
-% ind_mi_ind = find(p_mi_ind<.05); %6
+% ind_mi_dep = find(p_mi_dep<.05); %94
+% ind_mi_ind = find(p_mi_ind<.05); %110
 % 
 % %%
 % figure(1)

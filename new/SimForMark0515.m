@@ -91,7 +91,7 @@ s2 = s2/max(s2); %normalize so it falls between 0 and 1
 % Vhi2 = (0.01* Ahi .* cos(angle(hilbert(Vhi'))))';% ... and use PhiHi to get Vhi.
 Vhi2 = Vhi.*(1+modulation_level*s2);
 
-%% Create VLO1/VHI1 (Dependence on AmpLo) and VLO2/VHI2 (No Dependence on AmpLo)
+% Create VLO1/VHI1 (Dependence on AmpLo) and VLO2/VHI2 (No Dependence on AmpLo)
 
 nCtlPts = 10;
 
@@ -126,7 +126,7 @@ V2 = Vlo+Vhi2;
     VHI2 = filtfilt(b,1,V2);
 
 
-[xx,p] = glmfun(VLO1, VHI1,'theoretical',.05); %dependent
+[xx,p] = glmfun(VLO1, VHI1,'empirical','none',.05); %dependent
  [mi,p_mi] = modulation_index(VLO1,VHI1,'pvals');
-[XX,P] = glmfun(VLO2, VHI2, 'theoretical',.05); %independent
+[XX,P] = glmfun(VLO2, VHI2, 'empirical','none',.05); %independent
  [MI,P_MI] = modulation_index(VLO2,VHI2,'pvals');
