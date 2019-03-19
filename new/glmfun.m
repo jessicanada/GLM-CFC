@@ -125,6 +125,7 @@ function [XX,P] = glmfun(Vlo, Vhi,pval,ci,varargin)
       M = 10000;
       bMC = b2*ones(1,M) + sqrtm(stats2.covb)*normrnd(0,1,2,M);
       splineMC = glmval(bMC,X2eval,'log',stats2,'constant', 'off');
+      splineAAC = splineMC;
       mx = zeros(M,1);
       for k=1:M
           mx(k) = max(abs(1-splineMC(:,k)./splineC));
@@ -147,6 +148,12 @@ function [XX,P] = glmfun(Vlo, Vhi,pval,ci,varargin)
       end
       r3_CI = quantile(mx, [0.025, 0.975]);
       XX.rcfc_ci = r3_CI;
+      
+    mx = zeros(M,1);
+      for k = 1:M
+          mx(k) = max(abs(1-splineAAC(:,k)./splineMC(:,k)));
+      end
+      XX.rpac_new_ci = quantile(mx,[0.025,0.975]);
   end
 
 end
