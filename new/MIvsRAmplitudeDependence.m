@@ -12,15 +12,19 @@ for i = 1:N
     [p,xx,P,XX,mi,p_mi,MI,P_MI] = SimForMark0515(.9,1);
     %simulations where PAC events dependent on low-freq amplitude
     r_pacdep(i) = xx.rpac; %R values
+    r_pacdep_new(i) = xx.rpac_new;
     r_cfcdep(i) = xx.rcfc;
     p_pacdep(i) = p.rpac;
+    p_pacdep_new(i) = p.rpac_new;
     p_cfcdep(i) = p.rcfc;
     mi_dep(i) = mi;
     p_mi_dep(i) = p_mi;
     %simulations where PAC events independent of low-freq amplitude
     r_pacind(i) = XX.rpac; %R values
+    r_pacind_new(i) = XX.rpac_new;
     r_cfcind(i) = XX.rcfc;
     p_pacind(i) = P.rpac;
+    p_pacind_new(i) = P.rpac_new;
     p_cfcind(i) = P.rcfc;
     mi_ind(i) = MI;
     p_mi_ind(i) = P_MI;
@@ -29,22 +33,22 @@ end
 strname = ['R_MI_Comparison_Amplitude_Dependence'];
 save(strname)
 
-% %%
-% load('R_MI_Comparison_Amplitude_Dependence')
-% %load('Amplitude_Dependence_Sim_Theoretical.mat') %thresh 9
-% %p_cfcdep = p_cfcdep(1:100); p_cfcind = p_cfcind(1:100);
-% ind_pac_dep = find(p_pacdep<.05); %738
-% ind_cfc_dep = find(p_cfcdep<.05); %816
-% ind_pac_ind = find(p_pacind<.05); %730
-% ind_cfc_ind = find(p_cfcind<.05); %790
-% 
-% ind_mi_dep = find(p_mi_dep<.05); %94
-% ind_mi_ind = find(p_mi_ind<.05); %110
-% 
-% %%
-% figure(1)
-% %rcfc_dep = r_cfcdep(1:100); r_cfcind = r_cfcind(1:100);
-% histogram(r_cfcdep(ind_cfc_dep)); hold on; histogram(r_cfcind(ind_cfc_ind)); legend('dependent','independent'); title('CFC')
-% 
-% figure(2)
-% histogram(mi_dep(ind_mi_dep)); hold on; histogram(mi_ind(ind_mi_ind)); legend('dependent','independent'); title('MI')
+%%
+load('R_MI_Comparison_Amplitude_Dependence')
+%load('Amplitude_Dependence_Sim_Theoretical.mat') %thresh 9
+%p_cfcdep = p_cfcdep(1:100); p_cfcind = p_cfcind(1:100);
+ind_pac_dep = find(p_pacdep<.05); %738
+ind_cfc_dep = find(p_cfcdep<.05); %816
+ind_pac_ind = find(p_pacind<.05); %730
+ind_cfc_ind = find(p_cfcind<.05); %790
+
+ind_mi_dep = find(p_mi_dep<.05); %94
+ind_mi_ind = find(p_mi_ind<.05); %110
+
+%%
+figure(1)
+%rcfc_dep = r_cfcdep(1:100); r_cfcind = r_cfcind(1:100);
+histogram(r_cfcdep(ind_cfc_dep)); hold on; histogram(r_cfcind(ind_cfc_ind)); legend('dependent','independent'); title('CFC')
+
+figure(2)
+histogram(mi_dep(ind_mi_dep)); hold on; histogram(mi_ind(ind_mi_ind)); legend('dependent','independent'); title('MI')
