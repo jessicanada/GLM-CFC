@@ -1,7 +1,5 @@
 
 %figure(1);
-Create_Signals;
-VpinkTest = VpinkTest(2001:end-2000);
 mod = [1,1.2,1.4,1.6,1.8,2,2.2];
 
 % Filter into high freq band.
@@ -28,6 +26,8 @@ RPAC = zeros(1,1000); RPAC_new = zeros(1,1000);RCFC = zeros(1,1000);MI = zeros(1
 i=str2num(id);
 for j = 1:1000
         
+        Create_Signals;
+        VpinkTest = VpinkTest(2001:end-2000);
         amp_LO = mod(i);
         amp_HI = 5;
         V = amp_LO*VLOW + amp_HI*VHI + VpinkTest;
