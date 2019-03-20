@@ -1,6 +1,7 @@
 
 %figure(1);
 mod = [1,1.2,1.4,1.6,1.8,2,2.2];
+Create_Signals;
 
 % Filter into high freq band.
 locutoff = 100;                             % High freq passband = [100, 140] Hz.
