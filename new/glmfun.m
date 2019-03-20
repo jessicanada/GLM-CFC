@@ -165,7 +165,7 @@ function M = minvals(Vlo,Vhi)
     N = zeros(1,K); L = zeros(1,K);
     for i = 1:K
         Vhi_prime = AAFT(Vhi,1);
-        [XX] = glmfun(Vlo,Vhi_prime','none');        %compute R statistics between Vhi and shifted Vlo
+        [XX] = glmfun(Vlo,Vhi_prime','none','none',.05);        %compute R statistics between Vhi and shifted Vlo
         RPAC(i) = XX.rpac;
         RPAC_new(i) = XX.rpac_new;
         RCFC(i) = XX.rcfc;
