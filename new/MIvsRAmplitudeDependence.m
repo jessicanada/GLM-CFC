@@ -9,7 +9,7 @@ p_mi_dep = zeros(1,N); p_mi_ind = zeros(1,N);
 
 for i = 1:N
     i
-    [p,xx,P,XX,mi,p_mi,MI,P_MI] = SimForMark0515(.9,1);
+    [p,xx,P,XX,mi,p_mi,MI,P_MI] = SimForMark0515(.75,1);
     %simulations where PAC events dependent on low-freq amplitude
     r_pacdep(i) = xx.rpac; %R values
     r_pacdep_new(i) = xx.rpac_new;
@@ -30,25 +30,26 @@ for i = 1:N
     p_mi_ind(i) = P_MI;
 end
 
-strname = ['R_MI_Comparison_Amplitude_Dependence'];
+strname = ['R_MI_Comparison_Amplitude_Dependence_Threshold_75'];
 save(strname)
 
 %%
-load('R_MI_Comparison_Amplitude_Dependence')
-%load('Amplitude_Dependence_Sim_Theoretical.mat') %thresh 9
+%load('R_MI_Comparison_Amplitude_Dependence')
 %p_cfcdep = p_cfcdep(1:100); p_cfcind = p_cfcind(1:100);
-ind_pac_dep = find(p_pacdep<.05); %738
-ind_cfc_dep = find(p_cfcdep<.05); %816
-ind_pac_ind = find(p_pacind<.05); %730
-ind_cfc_ind = find(p_cfcind<.05); %790
+% ind_pac_dep = find(p_pacdep<.05); %83
+% ind_pac_new_dep = find(p_pacdep_new<.05); %27
+% ind_cfc_dep = find(p_cfcdep<.05); %48
+% ind_pac_ind = find(p_pacind<.05); %102
+% ind_pac_new_ind = find(p_pacind_new<.05); %23
+% ind_cfc_ind = find(p_cfcind<.05); %32
+% 
+% ind_mi_dep = find(p_mi_dep<.05); %85
+% ind_mi_ind = find(p_mi_ind<.05); %100
 
-ind_mi_dep = find(p_mi_dep<.05); %94
-ind_mi_ind = find(p_mi_ind<.05); %110
-
-%%
-figure(1)
-%rcfc_dep = r_cfcdep(1:100); r_cfcind = r_cfcind(1:100);
-histogram(r_cfcdep(ind_cfc_dep)); hold on; histogram(r_cfcind(ind_cfc_ind)); legend('dependent','independent'); title('CFC')
-
-figure(2)
-histogram(mi_dep(ind_mi_dep)); hold on; histogram(mi_ind(ind_mi_ind)); legend('dependent','independent'); title('MI')
+% %%
+% figure(1)
+% %rcfc_dep = r_cfcdep(1:100); r_cfcind = r_cfcind(1:100);
+% histogram(r_cfcdep(ind_cfc_dep)); hold on; histogram(r_cfcind(ind_cfc_ind)); legend('dependent','independent'); title('CFC')
+% 
+% figure(2)
+%histogram(mi_dep(ind_mi_dep)); hold on; histogram(mi_ind(ind_mi_ind)); legend('dependent','independent'); title('MI')
