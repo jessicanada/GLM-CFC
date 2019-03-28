@@ -148,7 +148,23 @@ for i=1:20
         plot(modulation_level-1, lq3, 'xr')
         plot(modulation_level-1, uq3, 'xr')
     end
-    xlim([0,100])
+    
+    plot([modulation_level+1,modulation_level+1], [mn1, lq1], 'Color', [0.8,0.8,0.8], 'LineWidth', 1)
+    plot([modulation_level+1,modulation_level+1], [mn1, uq1], 'Color', [0.8,0.8,0.8], 'LineWidth', 1)
+    plot(modulation_level+1, mn1, 'ok', 'MarkerSize', 8)
+    plot(modulation_level+1, lq1, 'xk')
+    plot(modulation_level+1, uq1, 'xk')
+    plot([modulation_level-1,modulation_level-1], [mn2, lq2], 'Color', 'b', 'LineWidth', 1)
+    plot([modulation_level-1,modulation_level-1], [mn2, uq2], 'Color', 'b', 'LineWidth', 1)
+    plot(modulation_level-1, mn2, 'ob', 'MarkerSize', 8)
+    plot(modulation_level-1, lq2, 'xb')
+    plot(modulation_level-1, uq2, 'xb')
+    plot([modulation_level-1,modulation_level-1], [mn3, lq3], 'Color', 'r', 'LineWidth', 1)
+    plot([modulation_level-1,modulation_level-1], [mn3, uq3], 'Color', 'r', 'LineWidth', 1)
+    plot(modulation_level-1, mn3, 'or', 'MarkerSize', 8)
+    plot(modulation_level-1, lq3, 'xr')
+    plot(modulation_level-1, uq3, 'xr')
+ xlim([0,100])
 end
 set(gca,'FontSize',13)
 grid off
@@ -219,6 +235,7 @@ for i=1:20
     
     
     modulation_level = MOD(i)*100;
+
     if length(x1)<=50
         plot([modulation_level+1,modulation_level+1], [mn1, lq1], 'Color', [0.8,0.8,0.8], 'LineWidth', 1)
         plot([modulation_level+1,modulation_level+1], [mn1, uq1], 'Color', [0.8,0.8,0.8], 'LineWidth', 1)
@@ -258,7 +275,23 @@ for i=1:20
         plot(modulation_level-1, lq3, 'xr')
         plot(modulation_level-1, uq3, 'xr')
     end
-    xlim([0,100])
+    
+    plot([modulation_level+1,modulation_level+1], [mn1, lq1], 'Color', [0.8,0.8,0.8], 'LineWidth', 1)
+    plot([modulation_level+1,modulation_level+1], [mn1, uq1], 'Color', [0.8,0.8,0.8], 'LineWidth', 1)
+    plot(modulation_level+1, mn1, 'ok', 'MarkerSize', 8)
+    plot(modulation_level+1, lq1, 'xk')
+    plot(modulation_level+1, uq1, 'xk')
+    plot([modulation_level-1,modulation_level-1], [mn2, lq2], 'Color', 'b', 'LineWidth', 1)
+    plot([modulation_level-1,modulation_level-1], [mn2, uq2], 'Color', 'b', 'LineWidth', 1)
+    plot(modulation_level-1, mn2, 'ob', 'MarkerSize', 8)
+    plot(modulation_level-1, lq2, 'xb')
+    plot(modulation_level-1, uq2, 'xb')
+    plot([modulation_level-1,modulation_level-1], [mn3, lq3], 'Color', 'r', 'LineWidth', 1)
+    plot([modulation_level-1,modulation_level-1], [mn3, uq3], 'Color', 'r', 'LineWidth', 1)
+    plot(modulation_level-1, mn3, 'or', 'MarkerSize', 8)
+    plot(modulation_level-1, lq3, 'xr')
+    plot(modulation_level-1, uq3, 'xr')
+ xlim([0,100])
 end
 set(gca,'FontSize',13)
 grid off
@@ -315,7 +348,7 @@ for i=1:20
     x2 = RAAC_new(i,:); ind_aac = find(PAAC_new(i,:)<.05); 
     x2 = x2(ind_aac);
     x3 = RCFC(i,:); ind_cfc = find(PCFC(i,:)<.05); 
-    x3 = x3(ind_cfc);
+  x3 = x3(ind_cfc);
     
     min1 = min(x1);  %snval(round(0.25*nensemble));
     max1 = max(x1);  %snval(round(0.75*nensemble));
@@ -336,6 +369,7 @@ for i=1:20
     
     
     modulation_level = MOD(i)*100;
+
     if length(x1)<=50
         plot([modulation_level+1,modulation_level+1], [mn1, lq1], 'Color', [0.8,0.8,0.8], 'LineWidth', 1)
         plot([modulation_level+1,modulation_level+1], [mn1, uq1], 'Color', [0.8,0.8,0.8], 'LineWidth', 1)
@@ -378,6 +412,25 @@ for i=1:20
     xlim([0,100])
 end
 ylim([.13,1.1])
+    
+    plot([modulation_level+1,modulation_level+1], [mn1, lq1], 'Color', [0.8,0.8,0.8], 'LineWidth', 1)
+    plot([modulation_level+1,modulation_level+1], [mn1, uq1], 'Color', [0.8,0.8,0.8], 'LineWidth', 1)
+    plot(modulation_level+1, mn1, 'ok', 'MarkerSize', 8)
+    plot(modulation_level+1, lq1, 'xk')
+    plot(modulation_level+1, uq1, 'xk')
+    plot([modulation_level-1,modulation_level-1], [mn2, lq2], 'Color', 'b', 'LineWidth', 1)
+    plot([modulation_level-1,modulation_level-1], [mn2, uq2], 'Color', 'b', 'LineWidth', 1)
+    plot(modulation_level-1, mn2, 'ob', 'MarkerSize', 8)
+    plot(modulation_level-1, lq2, 'xb')
+    plot(modulation_level-1, uq2, 'xb')
+    plot([modulation_level-1,modulation_level-1], [mn3, lq3], 'Color', 'r', 'LineWidth', 1)
+    plot([modulation_level-1,modulation_level-1], [mn3, uq3], 'Color', 'r', 'LineWidth', 1)
+    plot(modulation_level-1, mn3, 'or', 'MarkerSize', 8)
+    plot(modulation_level-1, lq3, 'xr')
+    plot(modulation_level-1, uq3, 'xr')
+    axis tight
+    xlim([0,100])
+end
 set(gca,'FontSize',13)
 grid off
 xlabel('Intensity'); ylabel('R')
