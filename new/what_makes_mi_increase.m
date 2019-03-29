@@ -171,6 +171,9 @@
 % 
 
 %% What makes MI increase/decrease?
+
+addpath('Chaotic Systems Toolbox')
+
 N = 100;
 RPAC1 = zeros(1,N); p_RPAC1 = zeros(1,N);
 MI1 = zeros(1,N); p_MI1 = zeros(1,N);
