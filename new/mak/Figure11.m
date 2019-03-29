@@ -71,11 +71,11 @@ Vhi_post = filtfilt(filtwts_hi,1,il);
 
 
 %% calculate R, MI values
-[R_pre] = glmfun(Vlo_pre',Vhi_pre','none','none',.05);
-[mi_pre] = modulation_index(Vlo_pre,Vhi_pre,'none');
+[R_pre,P_pre] = glmfun(Vlo_pre',Vhi_pre','empirical','none',.05);
+[mi_pre,mi_p_pre] = modulation_index(Vlo_pre,Vhi_pre,'pvals');
 
-[R_post] = glmfun(Vlo_post',Vhi_post','none','none',.05);
-[mi_post] = modulation_index(Vlo_post,Vhi_post,'none');
+[R_post,P_post] = glmfun(Vlo_post',Vhi_post','empirical','none',.05);
+[mi_post,mi_p_post] = modulation_index(Vlo_post,Vhi_post,'pvals');
 
 [R_ind,~,I] = glmfun_with_indicator(Vlo_pre,Vlo_post,Vhi_pre,Vhi_post,'none',.05);
 
@@ -98,7 +98,7 @@ legend('pre','post'); title('Vhi')
 %%
 
 %the coupling changed! 
-
+figure(1)
 XX1 = R_pre;
 surf(XX1.ampAXIS,XX1.phi0,XX1.PAC,'EdgeColor','none','FaceAlpha',.8,'FaceColor',[35, 106, 185]/255);
 hold on;
@@ -141,13 +141,20 @@ title('pre')
 set(gca,'FontSize',13)
 grid off
 %%
-figure(1)
+figure(3)
 subplot(1,2,1)
-modulation_index(Vlo_pre,Vhi_pre,'plot')
+[mi_pre,a_mean_pre] = modulation_index(Vlo_pre,Vhi_pre,'plot');
 title('pre')
+ylim([.05,.06])
 subplot(1,2,2)
-modulation_index(Vlo_post,Vhi_post,'plot')
+[mi_post,a_mean_post] = modulation_index(Vlo_post,Vhi_post,'plot');
 title('post')
+ylim([.05,.06])
+% modulation index is decreasing
+%%
+%idea: look at chunks of pre vs. chunks of post?
+sum(abs(a_mean_pre-1/18))
+sum(abs(a_mean_post-1/18))
 %% try and recreate this in simulation
 N = 100;
 MI_change = zeros(1,N);

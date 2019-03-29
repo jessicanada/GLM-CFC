@@ -164,7 +164,7 @@ f=[MINFREQ (1-trans)*locutoff/fNQ locutoff/fNQ hicutoff/fNQ (1+trans)*hicutoff/f
 m=[0       0                      1            1            0                      0];
 filtwts_lo = firls(filtorder,f,m);             % get FIR filter coefficients
 
-N = 100;
+N = 1000;
 RPAC = zeros(7,N); RPAC_new = zeros(7,N);RCFC = zeros(7,N);MI = zeros(7,N); RPAC_new_mak = zeros(7,N);
 
 for j = 1:N

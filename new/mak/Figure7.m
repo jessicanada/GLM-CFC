@@ -2,7 +2,12 @@ load('R_MI_Comparison_New_R_Definition_Update.mat')
 % sig_MI = # significant detections out of 1000 for MI = 583
 % sig_PAC_new = # significant detections out of 1000 for RPAC_new = 958
 
+c = categorical({'MI','R_{PAC}','R_{CFC}'});
 
+bar(c,[sig_MI,sig_PAC_new,sig_CFC]/1000)
+ylim([0,1.09])
+ylabel('Proportion of Events Detected')
+set(gca,'FontSize',12)
 %% Code to generate above data
 addpath('Chaotic Systems Toolbox')
 

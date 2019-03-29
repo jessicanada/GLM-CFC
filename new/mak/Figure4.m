@@ -84,19 +84,10 @@ subplot(4,4,8)
 hold on;
 for i=1:20
     x1 = RPAC_new(i,:); ind_pac = find(PPAC_new(i,:)<.05); 
-    if length(ind_pac)<=5
-        ind_pac = [];
-    end
     x1 = x1(ind_pac);
     x2 = RAAC_new(i,:); ind_aac = find(PAAC_new(i,:)<.05); 
-    if length(ind_aac)<=5
-        ind_aac = [];
-    end
     x2 = x2(ind_aac);
     x3 = RCFC(i,:); ind_cfc = find(PCFC(i,:)<.05); 
-    if length(ind_cfc)<=5
-        ind_cfc = [];
-    end
     x3 = x3(ind_cfc);
     
     min1 = min(x1);  %snval(round(0.25*nensemble));
@@ -118,6 +109,45 @@ for i=1:20
     
     
     modulation_level = MOD(i)*100;
+    if length(x1)<=50
+        plot([modulation_level+1,modulation_level+1], [mn1, lq1], 'Color', [0.8,0.8,0.8], 'LineWidth', 1)
+        plot([modulation_level+1,modulation_level+1], [mn1, uq1], 'Color', [0.8,0.8,0.8], 'LineWidth', 1)
+        plot(modulation_level+1, mn1, 'o', 'MarkerSize', 8,'Color',[0.8,0.8,0.8])
+        plot(modulation_level+1, lq1, 'x','Color',[0.8,0.8,0.8])
+        plot(modulation_level+1, uq1, 'x','Color',[0.8,0.8,0.8])
+    else
+        plot([modulation_level+1,modulation_level+1], [mn1, lq1], 'Color', 'k', 'LineWidth', 1)
+        plot([modulation_level+1,modulation_level+1], [mn1, uq1], 'Color', 'k', 'LineWidth', 1)
+        plot(modulation_level+1, mn1, 'ok', 'MarkerSize', 8)
+        plot(modulation_level+1, lq1, 'xk')
+        plot(modulation_level+1, uq1, 'xk')
+    end
+    if length(x2)<=50
+        plot([modulation_level-1,modulation_level-1], [mn2, lq2], 'Color', [140,184,255]/255, 'LineWidth', 1)
+        plot([modulation_level-1,modulation_level-1], [mn2, uq2], 'Color', [140,184,255]/255, 'LineWidth', 1)
+        plot(modulation_level-1, mn2, 'o', 'MarkerSize', 8, 'Color', [140,184,255]/255)
+        plot(modulation_level-1, lq2, 'x', 'Color', [140,184,255]/255)
+        plot(modulation_level-1, uq2, 'x', 'Color', [140,184,255]/255)
+    else
+        plot([modulation_level-1,modulation_level-1], [mn2, lq2], 'Color', 'b', 'LineWidth', 1)
+        plot([modulation_level-1,modulation_level-1], [mn2, uq2], 'Color', 'b', 'LineWidth', 1)
+        plot(modulation_level-1, mn2, 'ob', 'MarkerSize', 8)
+        plot(modulation_level-1, lq2, 'xb')
+        plot(modulation_level-1, uq2, 'xb')
+    end
+    if length(x3)<=50
+        plot([modulation_level-1,modulation_level-1], [mn3, lq3], 'Color', [255,133,112]/255, 'LineWidth', 1)
+        plot([modulation_level-1,modulation_level-1], [mn3, uq3], 'Color', [255,133,112]/255, 'LineWidth', 1)
+        plot(modulation_level-1, mn3, 'o', 'MarkerSize', 8, 'Color', [255,133,112]/255)
+        plot(modulation_level-1, lq3, 'x', 'Color', [255,133,112]/255)
+        plot(modulation_level-1, uq3, 'x', 'Color', [255,133,112]/255)
+    else
+        plot([modulation_level-1,modulation_level-1], [mn3, lq3], 'Color', 'r', 'LineWidth', 1)
+        plot([modulation_level-1,modulation_level-1], [mn3, uq3], 'Color', 'r', 'LineWidth', 1)
+        plot(modulation_level-1, mn3, 'or', 'MarkerSize', 8)
+        plot(modulation_level-1, lq3, 'xr')
+        plot(modulation_level-1, uq3, 'xr')
+    end
     
     plot([modulation_level+1,modulation_level+1], [mn1, lq1], 'Color', [0.8,0.8,0.8], 'LineWidth', 1)
     plot([modulation_level+1,modulation_level+1], [mn1, uq1], 'Color', [0.8,0.8,0.8], 'LineWidth', 1)
@@ -134,7 +164,7 @@ for i=1:20
     plot(modulation_level-1, mn3, 'or', 'MarkerSize', 8)
     plot(modulation_level-1, lq3, 'xr')
     plot(modulation_level-1, uq3, 'xr')
-    xlim([0,100])
+ xlim([0,100])
 end
 set(gca,'FontSize',13)
 grid off
@@ -179,21 +209,11 @@ ylim([0,150])
 subplot(4,4,12)
 hold on;
 for i=1:20
-    x1 = RPAC_new(i,:); ind_pac = find(PPAC_new(i,:)<.05);
-    %length(ind_pac)
-    if length(ind_pac)<=5
-        ind_pac = [];
-    end
+    x1 = RPAC_new(i,:); ind_pac = find(PPAC_new(i,:)<.05); 
     x1 = x1(ind_pac);
     x2 = RAAC_new(i,:); ind_aac = find(PAAC_new(i,:)<.05); 
-    if length(ind_aac)<=5
-        ind_aac = [];
-    end
     x2 = x2(ind_aac);
     x3 = RCFC(i,:); ind_cfc = find(PCFC(i,:)<.05); 
-    if length(ind_cfc)<=5
-        ind_cfc = [];
-    end
     x3 = x3(ind_cfc);
     
     min1 = min(x1);  %snval(round(0.25*nensemble));
@@ -215,6 +235,46 @@ for i=1:20
     
     
     modulation_level = MOD(i)*100;
+
+    if length(x1)<=50
+        plot([modulation_level+1,modulation_level+1], [mn1, lq1], 'Color', [0.8,0.8,0.8], 'LineWidth', 1)
+        plot([modulation_level+1,modulation_level+1], [mn1, uq1], 'Color', [0.8,0.8,0.8], 'LineWidth', 1)
+        plot(modulation_level+1, mn1, 'o', 'MarkerSize', 8,'Color',[0.8,0.8,0.8])
+        plot(modulation_level+1, lq1, 'x','Color',[0.8,0.8,0.8])
+        plot(modulation_level+1, uq1, 'x','Color',[0.8,0.8,0.8])
+    else
+        plot([modulation_level+1,modulation_level+1], [mn1, lq1], 'Color', 'k', 'LineWidth', 1)
+        plot([modulation_level+1,modulation_level+1], [mn1, uq1], 'Color', 'k', 'LineWidth', 1)
+        plot(modulation_level+1, mn1, 'ok', 'MarkerSize', 8)
+        plot(modulation_level+1, lq1, 'xk')
+        plot(modulation_level+1, uq1, 'xk')
+    end
+    if length(x2)<=50
+        plot([modulation_level-1,modulation_level-1], [mn2, lq2], 'Color', [140,184,255]/255, 'LineWidth', 1)
+        plot([modulation_level-1,modulation_level-1], [mn2, uq2], 'Color', [140,184,255]/255, 'LineWidth', 1)
+        plot(modulation_level-1, mn2, 'o', 'MarkerSize', 8, 'Color', [140,184,255]/255)
+        plot(modulation_level-1, lq2, 'x', 'Color', [140,184,255]/255)
+        plot(modulation_level-1, uq2, 'x', 'Color', [140,184,255]/255)
+    else
+        plot([modulation_level-1,modulation_level-1], [mn2, lq2], 'Color', 'b', 'LineWidth', 1)
+        plot([modulation_level-1,modulation_level-1], [mn2, uq2], 'Color', 'b', 'LineWidth', 1)
+        plot(modulation_level-1, mn2, 'ob', 'MarkerSize', 8)
+        plot(modulation_level-1, lq2, 'xb')
+        plot(modulation_level-1, uq2, 'xb')
+    end
+    if length(x3)<=50
+        plot([modulation_level-1,modulation_level-1], [mn3, lq3], 'Color', [255,133,112]/255, 'LineWidth', 1)
+        plot([modulation_level-1,modulation_level-1], [mn3, uq3], 'Color', [255,133,112]/255, 'LineWidth', 1)
+        plot(modulation_level-1, mn3, 'o', 'MarkerSize', 8, 'Color', [255,133,112]/255)
+        plot(modulation_level-1, lq3, 'x', 'Color', [255,133,112]/255)
+        plot(modulation_level-1, uq3, 'x', 'Color', [255,133,112]/255)
+    else
+        plot([modulation_level-1,modulation_level-1], [mn3, lq3], 'Color', 'r', 'LineWidth', 1)
+        plot([modulation_level-1,modulation_level-1], [mn3, uq3], 'Color', 'r', 'LineWidth', 1)
+        plot(modulation_level-1, mn3, 'or', 'MarkerSize', 8)
+        plot(modulation_level-1, lq3, 'xr')
+        plot(modulation_level-1, uq3, 'xr')
+    end
     
     plot([modulation_level+1,modulation_level+1], [mn1, lq1], 'Color', [0.8,0.8,0.8], 'LineWidth', 1)
     plot([modulation_level+1,modulation_level+1], [mn1, uq1], 'Color', [0.8,0.8,0.8], 'LineWidth', 1)
@@ -231,7 +291,7 @@ for i=1:20
     plot(modulation_level-1, mn3, 'or', 'MarkerSize', 8)
     plot(modulation_level-1, lq3, 'xr')
     plot(modulation_level-1, uq3, 'xr')
-    xlim([0,100])
+ xlim([0,100])
 end
 set(gca,'FontSize',13)
 grid off
@@ -284,20 +344,11 @@ subplot(4,4,16)
 hold on;
 for i=1:20
     x1 = RPAC_new(i,:); ind_pac = find(PPAC_new(i,:)<.05); 
-    if length(ind_pac)<=5
-        ind_pac = [];
-    end
     x1 = x1(ind_pac);
     x2 = RAAC_new(i,:); ind_aac = find(PAAC_new(i,:)<.05); 
-    if length(ind_aac)<=5
-        ind_aac = [];
-    end
     x2 = x2(ind_aac);
     x3 = RCFC(i,:); ind_cfc = find(PCFC(i,:)<.05); 
-    if length(ind_cfc)<=5
-        ind_cfc = [];
-    end
-    x3 = x3(ind_cfc);
+  x3 = x3(ind_cfc);
     
     min1 = min(x1);  %snval(round(0.25*nensemble));
     max1 = max(x1);  %snval(round(0.75*nensemble));
@@ -318,6 +369,49 @@ for i=1:20
     
     
     modulation_level = MOD(i)*100;
+
+    if length(x1)<=50
+        plot([modulation_level+1,modulation_level+1], [mn1, lq1], 'Color', [0.8,0.8,0.8], 'LineWidth', 1)
+        plot([modulation_level+1,modulation_level+1], [mn1, uq1], 'Color', [0.8,0.8,0.8], 'LineWidth', 1)
+        plot(modulation_level+1, mn1, 'o', 'MarkerSize', 8,'Color',[0.8,0.8,0.8])
+        plot(modulation_level+1, lq1, 'x','Color',[0.8,0.8,0.8])
+        plot(modulation_level+1, uq1, 'x','Color',[0.8,0.8,0.8])
+    else
+        plot([modulation_level+1,modulation_level+1], [mn1, lq1], 'Color', 'k', 'LineWidth', 1)
+        plot([modulation_level+1,modulation_level+1], [mn1, uq1], 'Color', 'k', 'LineWidth', 1)
+        plot(modulation_level+1, mn1, 'ok', 'MarkerSize', 8)
+        plot(modulation_level+1, lq1, 'xk')
+        plot(modulation_level+1, uq1, 'xk')
+    end
+    if length(x2)<=50
+        plot([modulation_level-1,modulation_level-1], [mn2, lq2], 'Color', [140,184,255]/255, 'LineWidth', 1)
+        plot([modulation_level-1,modulation_level-1], [mn2, uq2], 'Color', [140,184,255]/255, 'LineWidth', 1)
+        plot(modulation_level-1, mn2, 'o', 'MarkerSize', 8, 'Color', [140,184,255]/255)
+        plot(modulation_level-1, lq2, 'x', 'Color', [140,184,255]/255)
+        plot(modulation_level-1, uq2, 'x', 'Color', [140,184,255]/255)
+    else
+        plot([modulation_level-1,modulation_level-1], [mn2, lq2], 'Color', 'b', 'LineWidth', 1)
+        plot([modulation_level-1,modulation_level-1], [mn2, uq2], 'Color', 'b', 'LineWidth', 1)
+        plot(modulation_level-1, mn2, 'ob', 'MarkerSize', 8)
+        plot(modulation_level-1, lq2, 'xb')
+        plot(modulation_level-1, uq2, 'xb')
+    end
+    if length(x3)<=50
+        plot([modulation_level-1,modulation_level-1], [mn3, lq3], 'Color', [255,133,112]/255, 'LineWidth', 1)
+        plot([modulation_level-1,modulation_level-1], [mn3, uq3], 'Color', [255,133,112]/255, 'LineWidth', 1)
+        plot(modulation_level-1, mn3, 'o', 'MarkerSize', 8, 'Color', [255,133,112]/255)
+        plot(modulation_level-1, lq3, 'x', 'Color', [255,133,112]/255)
+        plot(modulation_level-1, uq3, 'x', 'Color', [255,133,112]/255)
+    else
+        plot([modulation_level-1,modulation_level-1], [mn3, lq3], 'Color', 'r', 'LineWidth', 1)
+        plot([modulation_level-1,modulation_level-1], [mn3, uq3], 'Color', 'r', 'LineWidth', 1)
+        plot(modulation_level-1, mn3, 'or', 'MarkerSize', 8)
+        plot(modulation_level-1, lq3, 'xr')
+        plot(modulation_level-1, uq3, 'xr')
+    end
+    xlim([0,100])
+end
+ylim([.13,1.1])
     
     plot([modulation_level+1,modulation_level+1], [mn1, lq1], 'Color', [0.8,0.8,0.8], 'LineWidth', 1)
     plot([modulation_level+1,modulation_level+1], [mn1, uq1], 'Color', [0.8,0.8,0.8], 'LineWidth', 1)
