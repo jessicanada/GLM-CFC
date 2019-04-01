@@ -174,7 +174,7 @@
 
 addpath('Chaotic Systems Toolbox')
 
-M = 3;
+M = 100;
 RPAC1 = zeros(1,M); p_RPAC1 = zeros(1,M);
 MI1 = zeros(1,M); p_MI1 = zeros(1,M);
 RPAC2 = zeros(1,M); p_RPAC2 = zeros(1,M);
