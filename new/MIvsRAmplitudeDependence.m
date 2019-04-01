@@ -1,15 +1,18 @@
 addpath('Chaotic Systems Toolbox')
 
-N = 1000;
+N = 100;
 p_cfcdep = zeros(1,N); p_pacdep = zeros(1,N);
 p_cfcind = zeros(1,N); p_pacind = zeros(1,N);
 r_pacdep = zeros(1,N); r_cfcdep = zeros(1,N);
 r_pacind = zeros(1,N); r_cfcind = zeros(1,N);
+mi_dep = zeros(1,N); mi_ind = zeros(1,N);
 p_mi_dep = zeros(1,N); p_mi_ind = zeros(1,N);
+r_pacdep_new = zeros(1,N); r_pacind_new = zeros(1,N);
+p_pacdep_new = zeros(1,N); p_pacind_new = zeros(1,N);
 
 for i = 1:N
     i
-    [p,xx,P,XX,mi,p_mi,MI,P_MI] = SimForMark0515(.75,1);
+    [p,xx,P,XX,mi,p_mi,MI,P_MI] = ind_dep_sim(.9,2);
     %simulations where PAC events dependent on low-freq amplitude
     r_pacdep(i) = xx.rpac; %R values
     r_pacdep_new(i) = xx.rpac_new;
@@ -30,12 +33,12 @@ for i = 1:N
     p_mi_ind(i) = P_MI;
 end
 
-strname = ['R_MI_Comparison_Amplitude_Dependence_Threshold_75'];
+strname = ['R_MI_Comparison_Amplitude_Dependence_Threshold_90_Mod_2'];
 save(strname)
 
-%%
-%load('R_MI_Comparison_Amplitude_Dependence')
-%p_cfcdep = p_cfcdep(1:100); p_cfcind = p_cfcind(1:100);
+ %%
+% load('R_MI_Comparison_Amplitude_Dependence_Threshold_75')
+% %p_cfcdep = p_cfcdep(1:100); p_cfcind = p_cfcind(1:100);
 % ind_pac_dep = find(p_pacdep<.05); %83
 % ind_pac_new_dep = find(p_pacdep_new<.05); %27
 % ind_cfc_dep = find(p_cfcdep<.05); %48
