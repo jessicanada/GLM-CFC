@@ -174,7 +174,7 @@
 
 addpath('Chaotic Systems Toolbox')
 
-M = 1000;
+M = 100;
 RPAC1 = zeros(1,M); p_RPAC1 = zeros(1,M);
 MI1 = zeros(1,M); p_MI1 = zeros(1,M);
 RPAC2 = zeros(1,M); p_RPAC2 = zeros(1,M);
@@ -279,6 +279,6 @@ RPAC2(i) = XX2.rpac_new; p_RPAC2(i) = P2.rpac_new;
 MI2(i) = mi2; p_MI2(i) = mp2;
 end
 
-save('R_MI_Comparison_Increase_AAC','RPAC1','RPAC2','p_RPAC1','p_RPAC2','MI1','MI2','p_MI1','p_MI2')
+save('R_MI_Comparison_Increase_AAC_100','RPAC1','RPAC2','p_RPAC1','p_RPAC2','MI1','MI2','p_MI1','p_MI2')
 
 %%
