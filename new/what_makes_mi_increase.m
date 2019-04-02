@@ -253,7 +253,7 @@ noise_level = 0.01;
 
 %Vlo = Vlo.*[1*ones(length(Vhi)/2,1);1*ones(length(Vhi)/2,1)]'; %increase low frequency amplitude in post
 %Vhi = Vhi.*[1*ones(length(Vhi)/2,1);1*ones(length(Vhi)/2,1)]'; %increase high frequency amplitude in post
-V1 = Vlo+Vhi1+noise_level*Vpink2; 
+V1 = 10*Vlo+Vhi1+noise_level*Vpink2; 
 V2 = Vlo+Vhi2+noise_level*Vpink2;
 
 %Filter into low freq band
@@ -280,3 +280,5 @@ MI2(i) = mi2; p_MI2(i) = mp2;
 end
 
 save('R_MI_Comparison_Increase_AAC','RPAC1','RPAC2','p_RPAC1','p_RPAC2','MI1','MI2','p_MI1','p_MI2')
+
+%%
