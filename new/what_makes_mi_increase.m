@@ -282,6 +282,7 @@
 %save('R_MI_Comparison_Increase_AAC_100','RPAC1','RPAC2','p_RPAC1','p_RPAC2','MI1','MI2','p_MI1','p_MI2')
 
 %%
+addpath('Chaotic Systems Toolbox')
 
 dt = 0.002;  Fs = 1/dt;  fNQ = Fs/2;        % Simulated time series parameters.
 N  = 400/dt+4000; N = N/10;
