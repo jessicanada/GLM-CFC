@@ -1,4 +1,4 @@
-function [XX,P,Vlo,Vhi,t] = simfun(pac_mod,aac_mod,sim_method,pval,ci,varargin)
+function [XX,P,Vlo,Vhi,t] = simfun(pac_mod,aac_mod,sim_method,pval,ci,AIC,varargin)
 %INPUTS:
 % pac_mod:          Intensity of PAC (I_PAC in paper)
 % aac_mod:          Intensity of AAC (I_AAC in paper)
@@ -117,10 +117,10 @@ filtwts = firls(filtorder,f,m);             % get FIR filter coefficients
 Vhi = filtfilt(filtwts,1,V1);            % Define high freq band activity.
 
 if isempty(varargin)
-    [XX,P] = glmfun(Vlo, Vhi, pval,ci);
+    [XX,P] = glmfun(Vlo, Vhi, pval,ci,AIC);
 else
     q = varargin{1};
-    [XX,P] = glmfun(Vlo, Vhi, pval,ci,q);
+    [XX,P] = glmfun(Vlo, Vhi, pval,ci,AIC,q);
 end
 
 end

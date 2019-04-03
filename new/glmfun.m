@@ -1,4 +1,4 @@
-function [XX,P] = glmfun(Vlo, Vhi,pval,ci,varargin)
+function [XX,P] = glmfun(Vlo, Vhi,pval,ci,AIC,varargin)
 %INPUTS:
 % Vlo:                   Low frequency signal
 % Vhi:                   High frequency signal
@@ -27,6 +27,45 @@ function [XX,P] = glmfun(Vlo, Vhi,pval,ci,varargin)
   phi = angle(hilbert(Vlo));
   amp = abs(hilbert(Vhi));
   ampLO = abs(hilbert(Vlo));
+  
+  if exist('AIC','var') && strcmp(AIC, 'AIC')
+    %fprintf('Running AIC ... \n')
+
+    Y = amp';
+    CtlPts = (4:1:30);
+    %Compute the AIC.
+    AIC1 = zeros(size(CtlPts)); AIC3 = zeros(size(CtlPts));
+    for k=1:length(CtlPts) %for each suggested # knots
+        nCtlPts = CtlPts(k);
+        X1 = spline_phase0(phi',nCtlPts);                                         %low frequency phase                                          %low frequency amplitude
+        %X3 = [X1,ampLO',sin(phi').*ampLO',cos(phi').*ampLO'];                     %low frequency phase, low frequency amplitude, interaction terms
+
+        [~,  dev1, ~]  = glmfit(X1,  Y, 'gamma', 'link', 'log', 'constant', 'off'); %PAC
+        %[~,  dev3, ~] = glmfit(X3, Y, 'gamma','link','log','constant','off');       %CFC
+
+        AIC1(k) = dev1 + 2*nCtlPts; %compute AIC
+        %AIC3(k) = dev3 + 2*nCtlPts; %compute AIC
+    end
+    %Select the # control points from AIC, and plot the AIC.
+    [~, imn1] = min(AIC1);
+    %[~, imn3] = min(AIC3);
+
+    nCtlPts1 = CtlPts(imn1);
+    %nCtlPts3 = CtlPts(imn3);
+
+%     figure(1); clf();
+%     plot(CtlPts, AIC1, 'k', 'LineWidth',2)
+%     hold on
+%     plot([nCtlPts1, nCtlPts1], [min(AIC1) max(AIC1)], 'r', 'LineWidth', 2)
+%     hold off
+%     axis tight
+%     xlabel('# control points')
+%     ylabel('AIC')
+% 
+     fprintf(['Suggested number of control points  is ' num2str(nCtlPts1) '\n'])
+
+    nCtlPts = nCtlPts1;
+  end
   
   %Define variables for GLM procedure.
   Y = amp';                                                                 %high frequency amplitude
@@ -82,6 +121,8 @@ function [XX,P] = glmfun(Vlo, Vhi,pval,ci,varargin)
 
       XX.rpac = max(max((abs(1-XX1./XXC))));
       XX.rpac_new = max(max(abs(1-Xtemp'./XX3)));
+      [mx, imx] = max(abs(XX.CFC(:)-XX.AAC(:)));
+      XX.rpac_new_mak = mx/abs(XX.AAC(imx));
 
       XX.raac = max(max((abs(1-Xtemp'./XXC))));
       XX.raac_new = max(max((abs(1-XX1./XX3))));
@@ -93,6 +134,7 @@ function [XX,P] = glmfun(Vlo, Vhi,pval,ci,varargin)
     M = minvals(Vlo,Vhi); %find empirical p-values
     P.rpac = max(.5,length(find(M.rpac>XX.rpac)))/length(M.rpac);
     P.rpac_new = max(.5,length(find(M.rpac_new>XX.rpac_new)))/length(M.rpac_new);
+    P.rpac_new_mak = max(.5,length(find(M.rpac_new_mak>XX.rpac_new_mak)))/length(M.rpac_new_mak);
     P.raac = max(.5,length(find(M.raac>XX.raac)))/length(M.raac);
     P.raac_new = max(.5,length(find(M.raac_new>XX.raac_new)))/length(M.raac_new);
     P.rcfc = max(.5,length(find(M.rcfc>XX.rcfc)))/length(M.rcfc);
@@ -161,7 +203,7 @@ end
 % Bootstrapped p-values
 function M = minvals(Vlo,Vhi)
     K = 100;
-    RPAC = zeros(1,K); RCFC = zeros(1,K); RAAC = zeros(1,K); RPAC_new = zeros(1,K); RAAC_new = zeros(1,K);
+    RPAC = zeros(1,K); RCFC = zeros(1,K); RAAC = zeros(1,K); RPAC_new = zeros(1,K); RAAC_new = zeros(1,K); RPAC_new_mak = zeros(1,K);
     N = zeros(1,K); L = zeros(1,K);
     for i = 1:K
         Vhi_prime = AAFT(Vhi,1);
@@ -171,8 +213,10 @@ function M = minvals(Vlo,Vhi)
         RCFC(i) = XX.rcfc;
         RAAC(i) = XX.raac;
         RAAC_new(i) = XX.raac_new;
+        RPAC_new_mak(i) = XX.rpac_new_mak;
     end
     M.rpac = RPAC; M.rcfc = RCFC; M.raac = RAAC; M.rpac_new = RPAC_new; M.raac_new = RAAC_new; M.shiftN = N; M.shiftL = L;
+    M.rpac_new_mak = RPAC_new_mak;
 end
 
 % Generate a design matrix X (n by nCtlPts) for a phase signal (n by 1)

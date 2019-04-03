@@ -17,7 +17,7 @@ mval = MOD(i);
 
 for j = 1:1000
     j
-    [XX,P] = simfun(0,mval,'pink','empirical','none',.05);
+    [XX,P] = simfun(0,mval,'pink','empirical','none','AIC',.05);
     RPAC(j) = XX.rpac;
     RPAC_new(j) = XX.rpac_new;
     RCFC(j) = XX.rcfc;
@@ -41,7 +41,7 @@ p_PAC_new = zeros(1,1000); p_AAC_new = zeros(1,1000);
 
 
 for j = 1:1000
-    [XX,P] = simfun(mval,0,'pink','empirical','none',.05);
+    [XX,P] = simfun(mval,0,'pink','empirical','none','AIC',.05);
     RPAC(j) = XX.rpac;
     RPAC_new(j) = XX.rpac_new;
     RCFC(j) = XX.rcfc;
@@ -65,7 +65,7 @@ p_PAC_new = zeros(1,1000); p_AAC_new = zeros(1,1000);
 
 
 for j = 1:1000
-    [XX,P] = simfun(mval,mval,'pink','empirical','none',.05);
+    [XX,P] = simfun(mval,mval,'pink','empirical','none','AIC',.05);
     RPAC(j) = XX.rpac;
     RPAC_new(j) = XX.rpac_new;
     RCFC(j) = XX.rcfc;
@@ -80,14 +80,14 @@ save(strname)
 
 % %%
 % MOD = [0:.05:.95];
-% rpac = zeros(11,1000);
-% raac_new = zeros(11,1000);
-% rpac_new = zeros(11,1000);
-% rcfc = zeros(11,1000);
-% raac = zeros(11,1000);
-% p_pac = zeros(11,1000); p_aac = zeros(11,1000); p_cfc = zeros(11,1000);
-% p_pac_new = zeros(11,1000); p_aac_new = zeros(11,1000);
-% for i = 1:11
+% rpac = zeros(20,1000);
+% raac_new = zeros(20,1000);
+% rpac_new = zeros(20,1000);
+% rcfc = zeros(20,1000);
+% raac = zeros(20,1000);
+% p_pac = zeros(20,1000); p_aac = zeros(20,1000); p_cfc = zeros(20,1000);
+% p_pac_new = zeros(20,1000); p_aac_new = zeros(20,1000);
+% for i = 1:20
 %     strname = ['PAC_Simulations_',num2str(i)];
 %     load(strname)
 %     rpac(i,:) = RPAC; rcfc(i,:) = RCFC; raac(i,:) = RAAC; rpac_new(i,:) = RPAC_new; raac_new(i,:) = RAAC_new;
@@ -98,7 +98,7 @@ save(strname)
 % 
 % figure;
 % subplot(1,2,1)
-% L = 11;
+% L = 20;
 % rpac = RPAC_new(L,:); raac = RAAC_new(L,:); rcfc = RCFC(L,:);
 % ppac = PPAC_new(L,:); paac = PAAC_new(L,:); pcfc = PCFC(L,:);
 % 
