@@ -12,7 +12,7 @@ p_pacdep_new = zeros(1,N); p_pacind_new = zeros(1,N);
 
 for i = 1:N
     i
-    [p,xx,P,XX,mi,p_mi,MI,P_MI] = ind_dep_sim(.75,2);
+    [p,xx,P,XX,mi,p_mi,MI,P_MI] = ind_dep_sim(.95,5);
     %simulations where PAC events dependent on low-freq amplitude
     r_pacdep(i) = xx.rpac; %R values
     r_pacdep_new(i) = xx.rpac_new;
@@ -33,7 +33,7 @@ for i = 1:N
     p_mi_ind(i) = P_MI;
 end
 
-strname = ['R_MI_Comparison_Amplitude_Dependence_Threshold_75_Mod_2'];
+strname = ['R_MI_Comparison_Amplitude_Dependence_Threshold_95_Mod_5'];
 save(strname)
 
  %%
