@@ -281,11 +281,21 @@
 
 %save('R_MI_Comparison_Increase_AAC_100','RPAC1','RPAC2','p_RPAC1','p_RPAC2','MI1','MI2','p_MI1','p_MI2')
 
-%%
 addpath('Chaotic Systems Toolbox')
 
+[XX1,XX2,MI1,MI2,RPAC1,RPAC2,p_MI1,p_MI2,p_RPAC1,p_RPAC2] = deal([]);
+
+for iter=1:100
+%iter=1;
+tic
 dt = 0.002;  Fs = 1/dt;  fNQ = Fs/2;        % Simulated time series parameters.
-N  = 400/dt+4000; N = N/10;
+N  = 400/dt+4000; N = N/2;                            % # steps to simulate, making the duration 20s
+%N = 20/dt+4000;    
+    fprintf([num2str(iter) '\n'])
+
+% Make the data.
+Vpink = make_pink_noise(1,N,dt);            % First, make pink noise.
+Vpink = Vpink - mean(Vpink);                % ... with zero mean.
 
 % Filter into low freq band.
 locutoff = 4;                               % Low freq passband = [4,7] Hz.
@@ -295,7 +305,12 @@ MINFREQ = 0;
 trans          = 0.15;                      % fractional width of transition zones
 f=[MINFREQ (1-trans)*locutoff/fNQ locutoff/fNQ hicutoff/fNQ (1+trans)*hicutoff/fNQ 1];
 m=[0       0                      1            1            0                      0];
-filtwts_lo = firls(filtorder,f,m);             % get FIR filter coefficients
+filtwts = firls(filtorder,f,m);             % get FIR filter coefficients
+Vlo = filtfilt(filtwts,1,Vpink);            % Define low freq band activity.
+
+% Make the data.
+Vpink = make_pink_noise(1,N,dt);            % Regenerate the pink noise.
+Vpink = Vpink - mean(Vpink);                % ... with zero mean.
 
 % Filter into high freq band.
 locutoff = 100;                             % High freq passband = [100, 140] Hz.
@@ -305,27 +320,8 @@ MINFREQ = 0;
 trans          = 0.15;                      % fractional width of transition zones
 f=[MINFREQ (1-trans)*locutoff/fNQ locutoff/fNQ hicutoff/fNQ (1+trans)*hicutoff/fNQ 1];
 m=[0       0                      1            1            0                      0];
-filtwts_hi = firls(filtorder,f,m);             % get FIR filter coefficients
-
-[RPAC1,RPAC2,p_RPAC1,p_RPAC2,MI1,MI2,p_MI1,p_MI2] = deal([]);
-
-for iter=1:500
-
-N  = 400/dt+4000; N = N/10;
-    
-fprintf([num2str(iter) '\n'])
-
-% Make the data.
-Vpink = make_pink_noise(1,N,dt);            % First, make pink noise.
-Vpink = Vpink - mean(Vpink);                % ... with zero mean.
-
-Vlo = filtfilt(filtwts_lo,1,Vpink);            % Define low freq band activity.
-
-% Make the data.
-Vpink = make_pink_noise(1,N,dt);            % Regenerate the pink noise.
-Vpink = Vpink - mean(Vpink);                % ... with zero mean.
-
-Vhi = filtfilt(filtwts_hi,1,Vpink);            % Define high freq band activity.
+filtwts = firls(filtorder,f,m);             % get FIR filter coefficients
+Vhi = filtfilt(filtwts,1,Vpink);            % Define high freq band activity.
 
 % Drop the edges of filtered data to avoid filter artifacts.
 Vlo = Vlo(2001:end-2000);
@@ -337,18 +333,47 @@ N   = length(Vlo);
 [~, ipks] = findpeaks(Vlo);
 AmpLo = abs(hilbert(Vlo));
 
+s = zeros(size(Vhi));                               % Define empty modulation envelope.
+for i0=1:length(ipks)                               % At every low freq peak,
+    if ipks(i0) > 10 && ipks(i0) < length(Vhi)-10   % ... if indices are in range of vector length.
+        s(ipks(i0)-10:ipks(i0)+10) = hann(21);     % Scaled Modulation
+    end
+end
+s = circshift(s,100);
+s = s/max(s);
+
 aac_mod = [0*ones(length(Vhi)/2,1);2*ones(length(Vhi)/2,1)]';
-Vhi     = Vhi.*(1+aac_mod.*AmpLo/max(AmpLo));            % Do all modulation at once.
+pac_mod = [0*ones(length(Vhi)/2,1);0*ones(length(Vhi)/2,1)]';    %decrease PAC in post
+Vhi     = Vhi.*(1+pac_mod.*s+aac_mod.*AmpLo/max(AmpLo));            % Do all modulation at once.
 
 Vpink2 = make_pink_noise(1,N,dt);
 noise_level = 0.01;
 
 Vlo = Vlo.*[1*ones(length(Vhi)/2,1); 10*ones(length(Vhi)/2,1)]'; %increase low frequency amplitude in post
-Vhi = Vhi.*[1*ones(length(Vhi)/2,1); 1*ones(length(Vhi)/2,1)]';
+Vhi = Vhi.*[1*ones(length(Vhi)/2,1); 1*ones(length(Vhi)/2,1)]'; %increase high frequency amplitude in post
 V1 = Vlo+Vhi+noise_level*Vpink2;
 
-Vlo = filtfilt(filtwts_lo,1,V1);            % Define low freq band activity.
-Vhi = filtfilt(filtwts_hi,1,V1);            % Define high freq band activity.
+%Filter into low freq band
+locutoff = 4;                               % Low freq passband = [4,7] Hz.
+hicutoff = 7;
+filtorder = 3*fix(Fs/locutoff);
+MINFREQ = 0;
+trans          = 0.15;                      % fractional width of transition zones
+f=[MINFREQ (1-trans)*locutoff/fNQ locutoff/fNQ hicutoff/fNQ (1+trans)*hicutoff/fNQ 1];
+m=[0       0                      1            1            0                      0];
+filtwts = firls(filtorder,f,m);             % get FIR filter coefficients
+Vlo = filtfilt(filtwts,1,V1);            % Define low freq band activity.
+
+% Filter into high freq band.
+locutoff = 100;                             % High freq passband = [100, 140] Hz.
+hicutoff = 140;
+filtorder = 10*fix(Fs/locutoff);
+MINFREQ = 0;
+trans          = 0.15;                      % fractional width of transition zones
+f=[MINFREQ (1-trans)*locutoff/fNQ locutoff/fNQ hicutoff/fNQ (1+trans)*hicutoff/fNQ 1];
+m=[0       0                      1            1            0                      0];
+filtwts = firls(filtorder,f,m);             % get FIR filter coefficients
+Vhi = filtfilt(filtwts,1,V1);            % Define high freq band activity.
 
 [XX,P] = glmfun(Vlo(1:length(Vhi)/2), Vhi(1:length(Vhi)/2), 'empirical','none','none',.05);
 RPAC1(iter) = XX.rpac_new; p_RPAC1(iter) = P.rpac_new;
@@ -359,7 +384,7 @@ MI1(iter) = MI; p_MI1(iter) = P;
 RPAC2(iter) = XX.rpac_new; p_RPAC2(iter) = P.rpac_new;
 [MI,P] = modulation_index(Vlo(length(Vhi)/2:end),Vhi(length(Vhi)/2:end),'pvals');
 MI2(iter) = MI; p_MI2(iter) = P;
-
+toc
 end
 
 save('R_MI_Comparison_Increase_AAC_Increase_Alow','RPAC1','RPAC2','p_RPAC1','p_RPAC2','MI1','MI2','p_MI1','p_MI2')
