@@ -310,8 +310,8 @@ filtwts_hi = firls(filtorder,f,m);             % get FIR filter coefficients
 [RPAC1,RPAC2,p_RPAC1,p_RPAC2,MI1,MI2,p_MI1,p_MI2] = deal([]);
 
 for iter=1:500
-%iter=1;
-tic
+
+N  = 400/dt+4000; N = N/10;
     
 fprintf([num2str(iter) '\n'])
 
@@ -359,7 +359,7 @@ MI1(iter) = MI; p_MI1(iter) = P;
 RPAC2(iter) = XX.rpac_new; p_RPAC2(iter) = P.rpac_new;
 [MI,P] = modulation_index(Vlo(length(Vhi)/2:end),Vhi(length(Vhi)/2:end),'pvals');
 MI2(iter) = MI; p_MI2(iter) = P;
-toc
+
 end
 
 save('R_MI_Comparison_Increase_AAC_Increase_Alow','RPAC1','RPAC2','p_RPAC1','p_RPAC2','MI1','MI2','p_MI1','p_MI2')
