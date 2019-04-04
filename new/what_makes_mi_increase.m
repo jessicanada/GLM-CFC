@@ -285,7 +285,7 @@ addpath('Chaotic Systems Toolbox')
 
 [XX1,XX2,MI1,MI2,RPAC1,RPAC2,p_MI1,p_MI2,p_RPAC1,p_RPAC2] = deal([]);
 
-for iter=1:100
+for iter=1:1000
 %iter=1;
 tic
 dt = 0.002;  Fs = 1/dt;  fNQ = Fs/2;        % Simulated time series parameters.
@@ -388,6 +388,7 @@ toc
 end
 
 save('R_MI_Comparison_Increase_AAC_Increase_Alow','RPAC1','RPAC2','p_RPAC1','p_RPAC2','MI1','MI2','p_MI1','p_MI2')
+
 % %%
 % figure;
 % subplot(1,2,1)
