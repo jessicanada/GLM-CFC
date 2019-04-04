@@ -342,7 +342,7 @@ end
 s = circshift(s,100);
 s = s/max(s);
 
-aac_mod = [0*ones(length(Vhi)/2,1);2*ones(length(Vhi)/2,1)]';
+aac_mod = [0*ones(length(Vhi)/2,1);0*ones(length(Vhi)/2,1)]';
 pac_mod = [0*ones(length(Vhi)/2,1);0*ones(length(Vhi)/2,1)]';    %decrease PAC in post
 Vhi     = Vhi.*(1+pac_mod.*s+aac_mod.*AmpLo/max(AmpLo));            % Do all modulation at once.
 
@@ -350,7 +350,7 @@ Vpink2 = make_pink_noise(1,N,dt);
 noise_level = 0.01;
 
 Vlo = Vlo.*[1*ones(length(Vhi)/2,1); 10*ones(length(Vhi)/2,1)]'; %increase low frequency amplitude in post
-Vhi = Vhi.*[1*ones(length(Vhi)/2,1); 1*ones(length(Vhi)/2,1)]'; %increase high frequency amplitude in post
+Vhi = Vhi.*[1*ones(length(Vhi)/2,1); 10*ones(length(Vhi)/2,1)]'; %increase high frequency amplitude in post
 V1 = Vlo+Vhi+noise_level*Vpink2;
 
 %Filter into low freq band
@@ -387,7 +387,7 @@ MI2(iter) = MI; p_MI2(iter) = P;
 toc
 end
 
-save('R_MI_Comparison_Increase_AAC_Increase_Alow','RPAC1','RPAC2','p_RPAC1','p_RPAC2','MI1','MI2','p_MI1','p_MI2')
+save('R_MI_Comparison_Increase_Alow_Increase_Ahigh','RPAC1','RPAC2','p_RPAC1','p_RPAC2','MI1','MI2','p_MI1','p_MI2')
 
 % %%
 % figure;
