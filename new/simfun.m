@@ -77,16 +77,41 @@ for i0=1:length(ipks)                               % At every low freq peak,
 end
 s = s/max(s);                                       % Normalize so it falls between 0 and 1
 
-if exist('sim_method','var') && strcmp(sim_method, 'GLM')
-    Ahi = (1+pac_mod*s)';                           % Define Ahi.
-    Vhi = (0.01* Ahi .* cos(angle(hilbert(Vhi'))))';% ... and use PhiHi to get Vhi.
-elseif exist('sim_method','var') && strcmp(sim_method, 'pink')
-    Vhi = Vhi.*(1+pac_mod*s);                       % Modulate high freq activity by modulation envelope.
+if exist('sim_method','var')
+    
+    switch sim_method
+        
+        case 'GLM'
+            Ahi = (1+pac_mod*s)';                           % Define Ahi.
+            Vhi = (0.01* Ahi .* cos(angle(hilbert(Vhi'))))';% ... and use PhiHi to get Vhi.
+            Vhi = Vhi.*(1+aac_mod*AmpLo/max(AmpLo));
+            
+        case 'pink'
+            Vhi = Vhi.*(1+pac_mod*s);                       % Modulate high freq activity by modulation envelope.
+            Vhi = Vhi.*(1+aac_mod*AmpLo/max(AmpLo));
+      
+        case 'spiking'                                      % Add a spiking model.
+            N     = 20/dt;                                  % # steps to simulate, making the duration 20s
+            t     = (1:N)*dt;                               % Time axis.
+            Alo   = 1+(sin(2*pi*t*0.1)+1)/2;                % Slow modulation of low frequency envelope.
+            Philo = pi*sawtooth(2*pi*t*4);                  % Low frequency phase is periodic (4 Hz).
+            Vlo   = Alo.*cos(Philo);
+
+            Philo_star = pi + Alo*pi;                       % Target phase depends on low frequency envelope.
+            sigma = 0.01;
+            lambda = 1/sqrt(2*pi*sigma) * exp( -(1+sawtooth(Philo - Philo_star,1/2)).^2 / (2*sigma^2) );
+            lambda = (0.001+0.3*lambda/max(lambda));
+            Vhi = 1*binornd(1,lambda);                      % When low freq phase is near target phase, produce a spike.
+            
+            Vlo =(Vlo)+0.1*randn(size(Vlo));                % Define Vlo and Vhi directly for this sim.
+            Vhi =(Vhi)+0.1*randn(size(Vlo));
+    end
+    
 else
     return
 end
 
-Vhi = Vhi.*(1+aac_mod*AmpLo/max(AmpLo));
+if exist('sim_method','var') && ~strcmp(sim_method, 'spiking')
 
 Vpink2 = make_pink_noise(1,N,dt);                   % Create additional pink noise signal
 noise_level = 0.01;
@@ -115,6 +140,8 @@ f=[MINFREQ (1-trans)*locutoff/fNQ locutoff/fNQ hicutoff/fNQ (1+trans)*hicutoff/f
 m=[0       0                      1            1            0                      0];
 filtwts = firls(filtorder,f,m);             % get FIR filter coefficients
 Vhi = filtfilt(filtwts,1,V1);            % Define high freq band activity.
+
+end
 
 if isempty(varargin)
     [XX,P] = glmfun(Vlo, Vhi, pval,ci,AIC);
