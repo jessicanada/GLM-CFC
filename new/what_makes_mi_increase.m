@@ -285,9 +285,8 @@ addpath('Chaotic Systems Toolbox')
 
 [XX1,XX2,MI1,MI2,RPAC1,RPAC2,p_MI1,p_MI2,p_RPAC1,p_RPAC2] = deal([]);
 
-for iter=1:1000
+for iter=1:100
 %iter=1;
-tic
 dt = 0.002;  Fs = 1/dt;  fNQ = Fs/2;        % Simulated time series parameters.
 N  = 400/dt+4000; N = N/2;                            % # steps to simulate, making the duration 20s
 %N = 20/dt+4000;    
@@ -384,7 +383,6 @@ MI1(iter) = MI; p_MI1(iter) = P;
 RPAC2(iter) = XX.rpac_new; p_RPAC2(iter) = P.rpac_new;
 [MI,P] = modulation_index(Vlo(length(Vhi)/2:end),Vhi(length(Vhi)/2:end),'pvals');
 MI2(iter) = MI; p_MI2(iter) = P;
-toc
 end
 
 save('R_MI_Comparison_Increase_Alow','RPAC1','RPAC2','p_RPAC1','p_RPAC2','MI1','MI2','p_MI1','p_MI2')
