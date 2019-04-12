@@ -1,5 +1,6 @@
 % Post
-clear;
+addpath('Chaotic Systems Toolbox')
+
 dt = 1e-3;  Fs = 1/dt;  fNQ = Fs/2; 
 
 RPAC = zeros(4,4,4); %four days, 4 electrodes
