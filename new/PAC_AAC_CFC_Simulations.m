@@ -1,23 +1,24 @@
 %% PAC AAC
 addpath('Chaotic Systems Toolbox')
+N = 100;
 
 %AAC
-MOD = [0:.05:.95];
-RPAC = zeros(1,1000);
-RAAC_new = zeros(1,1000);
-RPAC_new = zeros(1,1000);
-RCFC = zeros(1,1000);
-RAAC = zeros(1,1000);
-p_PAC = zeros(1,1000); p_AAC = zeros(1,1000); p_CFC = zeros(1,1000);
-p_PAC_new = zeros(1,1000); p_AAC_new = zeros(1,1000);
+RPAC = zeros(1,N);
+RAAC_new = zeros(1,N);
+RPAC_new = zeros(1,N);
+RCFC = zeros(1,N);
+RAAC = zeros(1,N);
+p_PAC = zeros(1,N); p_AAC = zeros(1,N); p_CFC = zeros(1,N);
+p_PAC_new = zeros(1,N); p_AAC_new = zeros(1,N);
 
 i = str2num(id);
 i
-mval = MOD(i);
+MOD = [0:.1:1.9];
+mval_AAC = MOD(i);
 
-for j = 1:1000
+for j = 1:N
     j
-    [XX,P] = simfun(0,mval,'pink','empirical','none','AIC',.05);
+    [XX,P] = simfun(0,mval_AAC,'pink','empirical','none','AIC',.05);
     RPAC(j) = XX.rpac;
     RPAC_new(j) = XX.rpac_new;
     RCFC(j) = XX.rcfc;
@@ -31,17 +32,18 @@ strname = ['AAC_Simulations_',id];
 save(strname)
 
 %PAC
-RPAC = zeros(1,1000);
-RAAC_new = zeros(1,1000);
-RPAC_new = zeros(1,1000);
-RCFC = zeros(1,1000);
-RAAC = zeros(1,1000);
-p_PAC = zeros(1,1000); p_AAC = zeros(1,1000); p_CFC = zeros(1,1000);
-p_PAC_new = zeros(1,1000); p_AAC_new = zeros(1,1000);
+RPAC = zeros(1,N);
+RAAC_new = zeros(1,N);
+RPAC_new = zeros(1,N);
+RCFC = zeros(1,N);
+RAAC = zeros(1,N);
+p_PAC = zeros(1,N); p_AAC = zeros(1,N); p_CFC = zeros(1,N);
+p_PAC_new = zeros(1,N); p_AAC_new = zeros(1,N);
 
-
-for j = 1:1000
-    [XX,P] = simfun(mval,0,'pink','empirical','none','AIC',.05);
+MOD = [0:.05:.95];
+mval_PAC = MOD(i)
+for j = 1:N
+    [XX,P] = simfun(mval_PAC,0,'pink','empirical','none','AIC',.05);
     RPAC(j) = XX.rpac;
     RPAC_new(j) = XX.rpac_new;
     RCFC(j) = XX.rcfc;
@@ -55,17 +57,17 @@ strname = ['PAC_Simulations_',id];
 save(strname)
 
 %CFC
-RPAC = zeros(1,1000);
-RAAC_new = zeros(1,1000);
-RPAC_new = zeros(1,1000);
-RCFC = zeros(1,1000);
-RAAC = zeros(1,1000);
-p_PAC = zeros(1,1000); p_AAC = zeros(1,1000); p_CFC = zeros(1,1000);
-p_PAC_new = zeros(1,1000); p_AAC_new = zeros(1,1000);
+RPAC = zeros(1,N);
+RAAC_new = zeros(1,N);
+RPAC_new = zeros(1,N);
+RCFC = zeros(1,N);
+RAAC = zeros(1,N);
+p_PAC = zeros(1,N); p_AAC = zeros(1,N); p_CFC = zeros(1,N);
+p_PAC_new = zeros(1,N); p_AAC_new = zeros(1,N);
 
 
-for j = 1:1000
-    [XX,P] = simfun(mval,mval,'pink','empirical','none','AIC',.05);
+for j = 1:N
+    [XX,P] = simfun(mval_PAC,mval_AAC,'pink','empirical','none','AIC',.05);
     RPAC(j) = XX.rpac;
     RPAC_new(j) = XX.rpac_new;
     RCFC(j) = XX.rcfc;
