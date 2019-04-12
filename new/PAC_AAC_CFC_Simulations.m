@@ -18,7 +18,7 @@ mval_AAC = MOD(i);
 
 for j = 1:N
     j
-    [XX,P] = simfun(0,mval_AAC,'pink','empirical','none','AIC',.05);
+    [XX,P] = simfun(0,mval_AAC,'pink','empirical','none','none',.05);
     RPAC(j) = XX.rpac;
     RPAC_new(j) = XX.rpac_new;
     RCFC(j) = XX.rcfc;
@@ -43,7 +43,7 @@ p_PAC_new = zeros(1,N); p_AAC_new = zeros(1,N);
 MOD = [0:.05:.95];
 mval_PAC = MOD(i)
 for j = 1:N
-    [XX,P] = simfun(mval_PAC,0,'pink','empirical','none','AIC',.05);
+    [XX,P] = simfun(mval_PAC,0,'pink','empirical','none','none',.05);
     RPAC(j) = XX.rpac;
     RPAC_new(j) = XX.rpac_new;
     RCFC(j) = XX.rcfc;
@@ -67,7 +67,7 @@ p_PAC_new = zeros(1,N); p_AAC_new = zeros(1,N);
 
 
 for j = 1:N
-    [XX,P] = simfun(mval_PAC,mval_AAC,'pink','empirical','none','AIC',.05);
+    [XX,P] = simfun(mval_PAC,mval_AAC,'pink','empirical','none','none',.05);
     RPAC(j) = XX.rpac;
     RPAC_new(j) = XX.rpac_new;
     RCFC(j) = XX.rcfc;
