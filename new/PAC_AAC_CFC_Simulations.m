@@ -1,6 +1,6 @@
 %% PAC AAC
 addpath('Chaotic Systems Toolbox')
-N = 100;
+N = 1000;
 
 %AAC
 RPAC = zeros(1,N);
