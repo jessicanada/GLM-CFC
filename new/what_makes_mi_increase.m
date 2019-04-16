@@ -285,7 +285,7 @@ addpath('Chaotic Systems Toolbox')
 
 [XX1,XX2,MI1,MI2,RPAC1,RPAC2,p_MI1,p_MI2,p_RPAC1,p_RPAC2] = deal([]);
 
-for iter=1:100
+for iter=1:1000
 %iter=1;
 dt = 0.002;  Fs = 1/dt;  fNQ = Fs/2;        % Simulated time series parameters.
 N  = 400/dt+4000; N = N/2;                            % # steps to simulate, making the duration 20s
@@ -385,7 +385,7 @@ RPAC2(iter) = XX.rpac_new; p_RPAC2(iter) = P.rpac_new;
 MI2(iter) = MI; p_MI2(iter) = P;
 end
 
-save('R_MI_Comparison_Increase_Alow','RPAC1','RPAC2','p_RPAC1','p_RPAC2','MI1','MI2','p_MI1','p_MI2')
+save('R_MI_Comparison_Increase_AAC_Increase_Alow_1000','RPAC1','RPAC2','p_RPAC1','p_RPAC2','MI1','MI2','p_MI1','p_MI2')
 
 % %%
 % figure;
@@ -410,6 +410,7 @@ save('R_MI_Comparison_Increase_Alow','RPAC1','RPAC2','p_RPAC1','p_RPAC2','MI1','
 % xlabel('MI')
 % 
 % %%
+% load('R_MI_Comparison_Increase_AAC_Increase_Alow.mat')
 % length(p_MI1(find(p_MI1<=.05)))
 % length(p_MI2(find(p_MI2<=.05)))
 % length(p_RPAC1(find(p_RPAC1<=.05)))
