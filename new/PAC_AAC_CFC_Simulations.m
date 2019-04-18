@@ -2,36 +2,87 @@
 addpath('Chaotic Systems Toolbox')
 N = 1000;
 
-%AAC
-RPAC = zeros(1,N);
-RAAC_new = zeros(1,N);
-RPAC_new = zeros(1,N);
-RCFC = zeros(1,N);
-RAAC = zeros(1,N);
-p_PAC = zeros(1,N); p_AAC = zeros(1,N); p_CFC = zeros(1,N);
-p_PAC_new = zeros(1,N); p_AAC_new = zeros(1,N);
+% %AAC
+% RPAC = zeros(1,N);
+% RAAC_new = zeros(1,N);
+% RPAC_new = zeros(1,N);
+% RCFC = zeros(1,N);
+% RAAC = zeros(1,N);
+% p_PAC = zeros(1,N); p_AAC = zeros(1,N); p_CFC = zeros(1,N);
+% p_PAC_new = zeros(1,N); p_AAC_new = zeros(1,N);
+% 
+% i = str2num(id);
+% i
+% MOD = [0:.1:1.9];
+% mval_AAC = MOD(i);
+% 
+% for j = 1:N
+%     j
+%     [XX,P] = simfun(0,mval_AAC,'pink','empirical','none','none',.05);
+%     RPAC(j) = XX.rpac;
+%     RPAC_new(j) = XX.rpac_new;
+%     RCFC(j) = XX.rcfc;
+%     RAAC(j) = XX.raac;
+%     RAAC_new(j) = XX.raac_new;
+%     p_PAC(j) = P.rpac; p_AAC(j) = P.raac; p_CFC(j) = P.rcfc;
+%     p_PAC_new(j) = P.rpac_new; p_AAC_new(j) = P.raac_new;
+% end
+% 
+% strname = ['AAC_Simulations_',id];
+% save(strname)
+
+% %PAC
+% RPAC = zeros(1,N);
+% RAAC_new = zeros(1,N);
+% RPAC_new = zeros(1,N);
+% RCFC = zeros(1,N);
+% RAAC = zeros(1,N);
+% p_PAC = zeros(1,N); p_AAC = zeros(1,N); p_CFC = zeros(1,N);
+% p_PAC_new = zeros(1,N); p_AAC_new = zeros(1,N);
+% 
+% MOD = [0:.05:.95];
+% mval_PAC = MOD(i)
+% for j = 1:N
+%     [XX,P] = simfun(mval_PAC,0,'pink','empirical','none','none',.05);
+%     RPAC(j) = XX.rpac;
+%     RPAC_new(j) = XX.rpac_new;
+%     RCFC(j) = XX.rcfc;
+%     RAAC(j) = XX.raac;
+%     RAAC_new(j) = XX.raac_new;
+%     p_PAC(j) = P.rpac; p_AAC(j) = P.raac; p_CFC(j) = P.rcfc;
+%     p_PAC_new(j) = P.rpac_new; p_AAC_new(j) = P.raac_new;
+% end
+% 
+% strname = ['PAC_Simulations_',id];
+% save(strname)
+
+% %CFC
+% RPAC = zeros(1,N);
+% RAAC_new = zeros(1,N);
+% RPAC_new = zeros(1,N);
+% RCFC = zeros(1,N);
+% RAAC = zeros(1,N);
+% p_PAC = zeros(1,N); p_AAC = zeros(1,N); p_CFC = zeros(1,N);
+% p_PAC_new = zeros(1,N); p_AAC_new = zeros(1,N);
+% 
+% 
+% for j = 1:N
+%     [XX,P] = simfun(mval_PAC,mval_AAC,'pink','empirical','none','none',.05);
+%     RPAC(j) = XX.rpac;
+%     RPAC_new(j) = XX.rpac_new;
+%     RCFC(j) = XX.rcfc;
+%     RAAC(j) = XX.raac;
+%     RAAC_new(j) = XX.raac_new;
+%     p_PAC(j) = P.rpac; p_AAC(j) = P.raac; p_CFC(j) = P.rcfc;
+%     p_PAC_new(j) = P.rpac_new; p_AAC_new(j) = P.raac_new;
+% end
+% 
+% strname = ['CFC_Simulations_',id];
+% save(strname)
 
 i = str2num(id);
-i
-MOD = [0:.1:1.9];
-mval_AAC = MOD(i);
-
-for j = 1:N
-    j
-    [XX,P] = simfun(0,mval_AAC,'pink','empirical','none','none',.05);
-    RPAC(j) = XX.rpac;
-    RPAC_new(j) = XX.rpac_new;
-    RCFC(j) = XX.rcfc;
-    RAAC(j) = XX.raac;
-    RAAC_new(j) = XX.raac_new;
-    p_PAC(j) = P.rpac; p_AAC(j) = P.raac; p_CFC(j) = P.rcfc;
-    p_PAC_new(j) = P.rpac_new; p_AAC_new(j) = P.raac_new;
-end
-
-strname = ['AAC_Simulations_',id];
-save(strname)
-
-%PAC
+MOD = [0:.025:.5];
+mval_PAC = MOD(i);
 RPAC = zeros(1,N);
 RAAC_new = zeros(1,N);
 RPAC_new = zeros(1,N);
@@ -40,10 +91,8 @@ RAAC = zeros(1,N);
 p_PAC = zeros(1,N); p_AAC = zeros(1,N); p_CFC = zeros(1,N);
 p_PAC_new = zeros(1,N); p_AAC_new = zeros(1,N);
 
-MOD = [0:.05:.95];
-mval_PAC = MOD(i)
 for j = 1:N
-    [XX,P] = simfun(mval_PAC,0,'pink','empirical','none','none',.05);
+    [XX,P] = simfun(mval_PAC,2,'pink','empirical','none','none',.05);
     RPAC(j) = XX.rpac;
     RPAC_new(j) = XX.rpac_new;
     RCFC(j) = XX.rcfc;
@@ -53,31 +102,7 @@ for j = 1:N
     p_PAC_new(j) = P.rpac_new; p_AAC_new(j) = P.raac_new;
 end
 
-strname = ['PAC_Simulations_',id];
-save(strname)
-
-%CFC
-RPAC = zeros(1,N);
-RAAC_new = zeros(1,N);
-RPAC_new = zeros(1,N);
-RCFC = zeros(1,N);
-RAAC = zeros(1,N);
-p_PAC = zeros(1,N); p_AAC = zeros(1,N); p_CFC = zeros(1,N);
-p_PAC_new = zeros(1,N); p_AAC_new = zeros(1,N);
-
-
-for j = 1:N
-    [XX,P] = simfun(mval_PAC,mval_AAC,'pink','empirical','none','none',.05);
-    RPAC(j) = XX.rpac;
-    RPAC_new(j) = XX.rpac_new;
-    RCFC(j) = XX.rcfc;
-    RAAC(j) = XX.raac;
-    RAAC_new(j) = XX.raac_new;
-    p_PAC(j) = P.rpac; p_AAC(j) = P.raac; p_CFC(j) = P.rcfc;
-    p_PAC_new(j) = P.rpac_new; p_AAC_new(j) = P.raac_new;
-end
-
-strname = ['CFC_Simulations_',id];
+strname = ['CFC_Simulations_Sensitivity_',id];
 save(strname)
 
 % %%
