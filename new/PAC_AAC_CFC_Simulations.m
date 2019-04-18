@@ -83,23 +83,18 @@ N = 1000;
 i = str2num(id);
 MOD = [0:.025:.5];
 mval_PAC = MOD(i);
-RPAC = zeros(1,N);
 RAAC_new = zeros(1,N);
 RPAC_new = zeros(1,N);
-RCFC = zeros(1,N);
-RAAC = zeros(1,N);
-p_PAC = zeros(1,N); p_AAC = zeros(1,N); p_CFC = zeros(1,N);
 p_PAC_new = zeros(1,N); p_AAC_new = zeros(1,N);
+MI = zeros(1,N); p_MI = zeros(1,N);
 
 for j = 1:N
-    [XX,P] = simfun(mval_PAC,2,'pink','empirical','none','none',.05);
-    RPAC(j) = XX.rpac;
+    [XX,P,Vlo,Vhi] = simfun(mval_PAC,2,'pink','empirical','none','none',.05);
     RPAC_new(j) = XX.rpac_new;
-    RCFC(j) = XX.rcfc;
-    RAAC(j) = XX.raac;
     RAAC_new(j) = XX.raac_new;
-    p_PAC(j) = P.rpac; p_AAC(j) = P.raac; p_CFC(j) = P.rcfc;
     p_PAC_new(j) = P.rpac_new; p_AAC_new(j) = P.raac_new;
+    [mi,p] = modulation_index(Vlo,Vhi,'pvals');
+    MI(j) = mi; p_MI(j) = p;
 end
 
 strname = ['CFC_Simulations_Sensitivity_',id];
