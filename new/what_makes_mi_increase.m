@@ -341,7 +341,7 @@ end
 s = circshift(s,100);
 s = s/max(s);
 
-aac_mod = [0*ones(length(Vhi)/2,1);0*ones(length(Vhi)/2,1)]';
+aac_mod = [0*ones(length(Vhi)/2,1);2*ones(length(Vhi)/2,1)]';
 pac_mod = [0*ones(length(Vhi)/2,1);0*ones(length(Vhi)/2,1)]';    %decrease PAC in post
 Vhi     = Vhi.*(1+pac_mod.*s+aac_mod.*AmpLo/max(AmpLo));            % Do all modulation at once.
 
