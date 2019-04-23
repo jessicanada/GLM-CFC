@@ -1,7 +1,7 @@
 %% Code to Generate Quantile Figure
 addpath('Chaotic Systems Toolbox')
 
-mod = [1:.2:2.6];
+mod = [1:.05:1.5];
 Create_Signals;
 
 % Filter into high freq band.
