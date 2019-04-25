@@ -2,6 +2,7 @@
 addpath('Chaotic Systems Toolbox')
 
 mod = [1:.05:1.5];
+%mod = [1,1.5];
 Create_Signals;
 
 % Filter into high freq band.
@@ -24,7 +25,8 @@ m=[0       0                      1            1            0                   
 filtwts_lo = firls(filtorder,f,m);             % get FIR filter coefficients
 
 N = 1000;
-RPAC = zeros(length(mod),N);MI = zeros(length(mod),N);
+%RPAC = zeros(length(mod),N);MI = zeros(length(mod),N);
+RPAC = []; MI = [];
 for j = 1:N
     j
     Create_Signals;
@@ -32,7 +34,8 @@ for j = 1:N
     
     for i = 1:length(mod)
         amp_LO = mod(i);
-        amp_HI = 5;
+        %amp_HI = 5;
+        amp_HI = 1;
         V = amp_LO*VLOW + amp_HI*VHI + VpinkTest;
 
         Vlo = filtfilt(filtwts_lo,1,V);            % Define low freq band activity.
@@ -45,5 +48,14 @@ for j = 1:N
     end
 end
 
-strname = ['Increase_Alow_Results_200_Seconds'];
+strname = ['Increase_Alow_Results_200_Seconds_No_Ahigh_Modulation'];
 save(strname,'RPAC','MI')
+%%
+% k = 2                                                                                                                                                                                                                                                                                                                                                                                        ;
+% n = 10;
+% subplot(1,2,1)
+% histogram(RPAC(1,:),n,'Normalization','Probability'); hold on; histogram(RPAC(k,:),n,'Normalization','Probability'); legend('A_{low} small','A_{low} large')
+% title('RPAC')
+% subplot(1,2,2)
+% histogram(MI(1,:),n,'Normalization','Probability'); hold on; histogram(MI(k,:),n,'Normalization','Probability'); legend('small','large')
+% title('MI')
