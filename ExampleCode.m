@@ -1,10 +1,10 @@
 % Note: the following simulations use a GLM-based method to simulate V_low
 % and V_high, and the p-values are the analytical p-values from the
-% manuscript.
+% manuscript
 
 %% Signal with neither PAC nor AAC
 
-[XX,P,Vlo,Vhi,t] = simfun(0,0,'GLM','theoretical','none',.05);
+[XX,P,Vlo,Vhi,t] = simfun(0,0,'pink','pval','none','none',.05);
 figure(1)
 plot(t,Vlo + .08,t,Vhi,'LineWidth',2); axis off
 hold on;
@@ -19,26 +19,25 @@ axis off
 set(gca,'FontSize',13)
 str = strcat({'R_PAC is '},{num2str(XX.rpac)},{' with p-value '},{num2str(P.rpac)}); disp(str);
 str = strcat({'R_AAC is '},{num2str(XX.raac)},{' with p-value '},{num2str(P.raac)}); disp(str);
-str = strcat({'R_CFC is '},{num2str(XX.rcfc)},{' with p-value '},{num2str(P.rcfc)}); disp(str);
 xlim([8,10])
 
-figure(2); clf
-surf(XX.ampAXIS,XX.phi0,XX.PAC,'EdgeColor','none','FaceAlpha',.8,'FaceColor',[35, 106, 185]/255);
+figure(2)
+surf(XX.ampAXIS,XX.phi0,XX.philow,'EdgeColor','none','FaceAlpha',.8,'FaceColor',[35, 106, 185]/255);
 hold on;
-surf(XX.ampAXIS,XX.phi0,XX.AAC,'EdgeColor','none','FaceAlpha',.8,'FaceColor',[214, 26, 70]/255);
+surf(XX.ampAXIS,XX.phi0,XX.alow,'EdgeColor','none','FaceAlpha',.8,'FaceColor',[214, 26, 70]/255);
 hold on;
-surf(XX.ampAXIS,XX.phi0,XX.CFC,'EdgeColor','none','FaceAlpha',.9,'FaceColor',[253, 220, 34]/255);
+surf(XX.ampAXIS,XX.phi0,XX.alowphilow,'EdgeColor','none','FaceAlpha',.9,'FaceColor',[253, 220, 34]/255);
 
 xlim([min(XX.ampAXIS),max(XX.ampAXIS)]); ylim([min(XX.phi0),max(XX.phi0)])
 xlabel('A_{low}'); ylabel('\Phi_{low}'); zlabel('A_{high}')
-legend('PAC','AAC','CFC')
+legend('PAC','AAC')
 set(gca,'FontSize',13)
 grid off
-zlim([.008,.02])
+zlim([.004,.01])
 
 %% Signal with PAC
 
-[XX,P,Vlo,Vhi,t] = simfun(1,0,'GLM','theoretical','none',.05);
+[XX,P,Vlo,Vhi,t] = simfun(1,0,'pink','pval','none','none',.05);
 figure(1)
 plot(t,Vlo + .08,t,Vhi,'LineWidth',2); axis off
 hold on;
@@ -53,26 +52,25 @@ axis off
 set(gca,'FontSize',13)
 str = strcat({'R_PAC is '},{num2str(XX.rpac)},{' with p-value '},{num2str(P.rpac)}); disp(str);
 str = strcat({'R_AAC is '},{num2str(XX.raac)},{' with p-value '},{num2str(P.raac)}); disp(str);
-str = strcat({'R_CFC is '},{num2str(XX.rcfc)},{' with p-value '},{num2str(P.rcfc)}); disp(str);
 xlim([8,10])
 
-figure(2); clf
-surf(XX.ampAXIS,XX.phi0,XX.PAC,'EdgeColor','none','FaceAlpha',.8,'FaceColor',[35, 106, 185]/255);
+figure(2)
+surf(XX.ampAXIS,XX.phi0,XX.philow,'EdgeColor','none','FaceAlpha',.8,'FaceColor',[35, 106, 185]/255);
 hold on;
-surf(XX.ampAXIS,XX.phi0,XX.AAC,'EdgeColor','none','FaceAlpha',.8,'FaceColor',[214, 26, 70]/255);
+surf(XX.ampAXIS,XX.phi0,XX.alow,'EdgeColor','none','FaceAlpha',.8,'FaceColor',[214, 26, 70]/255);
 hold on;
-surf(XX.ampAXIS,XX.phi0,XX.CFC,'EdgeColor','none','FaceAlpha',.9,'FaceColor',[253, 220, 34]/255);
+surf(XX.ampAXIS,XX.phi0,XX.alowphilow,'EdgeColor','none','FaceAlpha',.9,'FaceColor',[253, 220, 34]/255);
 
 xlim([min(XX.ampAXIS),max(XX.ampAXIS)]); ylim([min(XX.phi0),max(XX.phi0)])
 xlabel('A_{low}'); ylabel('\Phi_{low}'); zlabel('A_{high}')
-legend('PAC','AAC','CFC')
+legend('PAC','AAC')
 set(gca,'FontSize',13)
 grid off
-zlim([.008,.02])
+zlim([.004,.01])
 
 %% Signal with AAC
 
-[XX,P,Vlo,Vhi,t] = simfun(0,1,'GLM','theoretical','none',.05);
+[XX,P,Vlo,Vhi,t] = simfun(0,1,'pink','pval','none','none',.05);
 figure(1)
 plot(t,Vlo + .08,t,Vhi,'LineWidth',2); axis off
 hold on;
@@ -87,26 +85,25 @@ axis off
 set(gca,'FontSize',13)
 str = strcat({'R_PAC is '},{num2str(XX.rpac)},{' with p-value '},{num2str(P.rpac)}); disp(str);
 str = strcat({'R_AAC is '},{num2str(XX.raac)},{' with p-value '},{num2str(P.raac)}); disp(str);
-str = strcat({'R_CFC is '},{num2str(XX.rcfc)},{' with p-value '},{num2str(P.rcfc)}); disp(str);
 xlim([8,10])
 
-figure(2); clf
-surf(XX.ampAXIS,XX.phi0,XX.PAC,'EdgeColor','none','FaceAlpha',.8,'FaceColor',[35, 106, 185]/255);
+figure(2)
+surf(XX.ampAXIS,XX.phi0,XX.philow,'EdgeColor','none','FaceAlpha',.8,'FaceColor',[35, 106, 185]/255);
 hold on;
-surf(XX.ampAXIS,XX.phi0,XX.AAC,'EdgeColor','none','FaceAlpha',.8,'FaceColor',[214, 26, 70]/255);
+surf(XX.ampAXIS,XX.phi0,XX.alow,'EdgeColor','none','FaceAlpha',.8,'FaceColor',[214, 26, 70]/255);
 hold on;
-surf(XX.ampAXIS,XX.phi0,XX.CFC,'EdgeColor','none','FaceAlpha',.9,'FaceColor',[253, 220, 34]/255);
+surf(XX.ampAXIS,XX.phi0,XX.alowphilow,'EdgeColor','none','FaceAlpha',.9,'FaceColor',[253, 220, 34]/255);
 
 xlim([min(XX.ampAXIS),max(XX.ampAXIS)]); ylim([min(XX.phi0),max(XX.phi0)])
 xlabel('A_{low}'); ylabel('\Phi_{low}'); zlabel('A_{high}')
-legend('PAC','AAC','CFC')
+legend('PAC','AAC')
 set(gca,'FontSize',13)
 grid off
-zlim([.008,.02])
+zlim([.004,.01])
 
 %% Signal with PAC and AAC
 
-[XX,P,Vlo,Vhi,t] = simfun(1,1,'GLM','theoretical','none',.05);
+[XX,P,Vlo,Vhi,t] = simfun(1,1,'pink','pval','none','none',.05);
 figure(1)
 plot(t,Vlo + .08,t,Vhi,'LineWidth',2); axis off
 hold on;
@@ -121,19 +118,18 @@ axis off
 set(gca,'FontSize',13)
 str = strcat({'R_PAC is '},{num2str(XX.rpac)},{' with p-value '},{num2str(P.rpac)}); disp(str);
 str = strcat({'R_AAC is '},{num2str(XX.raac)},{' with p-value '},{num2str(P.raac)}); disp(str);
-str = strcat({'R_CFC is '},{num2str(XX.rcfc)},{' with p-value '},{num2str(P.rcfc)}); disp(str);
 xlim([8,10])
 
-figure(2); clf
-surf(XX.ampAXIS,XX.phi0,XX.PAC,'EdgeColor','none','FaceAlpha',.8,'FaceColor',[35, 106, 185]/255);
+figure(2)
+surf(XX.ampAXIS,XX.phi0,XX.philow,'EdgeColor','none','FaceAlpha',.8,'FaceColor',[35, 106, 185]/255);
 hold on;
-surf(XX.ampAXIS,XX.phi0,XX.AAC,'EdgeColor','none','FaceAlpha',.8,'FaceColor',[214, 26, 70]/255);
+surf(XX.ampAXIS,XX.phi0,XX.alow,'EdgeColor','none','FaceAlpha',.8,'FaceColor',[214, 26, 70]/255);
 hold on;
-surf(XX.ampAXIS,XX.phi0,XX.CFC,'EdgeColor','none','FaceAlpha',.9,'FaceColor',[253, 220, 34]/255);
+surf(XX.ampAXIS,XX.phi0,XX.alowphilow,'EdgeColor','none','FaceAlpha',.9,'FaceColor',[253, 220, 34]/255);
 
 xlim([min(XX.ampAXIS),max(XX.ampAXIS)]); ylim([min(XX.phi0),max(XX.phi0)])
 xlabel('A_{low}'); ylabel('\Phi_{low}'); zlabel('A_{high}')
-legend('PAC','AAC','CFC')
+legend('PAC','AAC')
 set(gca,'FontSize',13)
 grid off
-zlim([.008,.02])
+zlim([.004,.01])
