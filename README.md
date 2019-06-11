@@ -13,4 +13,6 @@ glmfun_with_indicator: an example of how to update glmfun to test for effect of 
 
 The human data from figures 9 and 10 can be found in Patient_Data, and the rat data from figure 11 can be found at https://github.com/tne-lab/cl-example-data
 
+  The [Chaotic System Toolbox](https://www.mathworks.com/matlabcentral/fileexchange/1597-chaotic-systems-toolbox) is required to generate surrogate data.
+
 Any questions/comments please direct to Jessica Nadalin (jnadalin@bu.edu)
