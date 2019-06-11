@@ -11,11 +11,9 @@ L-E Martinet, A. S. Widge, S. S. Cash, U. T. Eden, M. A. Kramer, 2018.
 
 `glmfun.m`: code to evaluate the coupling statistics R_PAC, R_AAC, and R_CFC, along with confidence intervals and p-values, between two signals.
 
-`ExampleCode`: run to get example voltage traces and surfaces in Phi_low, A_low, A_high space (as in Figure 4). Four simulations are present: one with no CFC, one with PAC, one with AAC, and one with both PAC and AAC
-
 `glmfun_with_indicator`: an example of how to update glmfun to test for effect of condition (e.g. pre and post stimuli) on coupling
 
-The human data from figures 9 and 10 can be found in Patient_Data, and the rat data from figure 11 can be found at https://github.com/tne-lab/cl-example-data
+The voltage traces for the human data can be found in `Patient_Data.mat`, and the rodent data can be found at https://github.com/tne-lab/cl-example-data
 
 The [Chaotic System Toolbox](https://www.mathworks.com/matlabcentral/fileexchange/1597-chaotic-systems-toolbox) is required to generate surrogate data.
 
