@@ -82,7 +82,7 @@
 % 
 i = str2num(id);
 MOD = [0:.025:.5];
-N = length(MOD);
+N = 1000;
 mval_PAC = MOD(i);
 RAAC_new = zeros(1,N);
 RPAC_new = zeros(1,N);
