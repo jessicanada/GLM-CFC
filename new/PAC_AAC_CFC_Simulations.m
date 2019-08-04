@@ -97,7 +97,7 @@ for j = 1:N
     MI(j) = mi; p_MI(j) = p;
 end
 
-strname = ['CFC_Simulations_Sensitivity_',id];
+strname = ['CFC_Simulations_Sensitivity_zero_AAC',id];
 save(strname)
 
 % %%
