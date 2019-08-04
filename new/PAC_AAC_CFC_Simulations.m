@@ -1,7 +1,7 @@
-%% PAC AAC
-addpath('Chaotic Systems Toolbox')
-N = 1000;
-
+% %% PAC AAC
+% addpath('Chaotic Systems Toolbox')
+% N = 1000;
+% 
 % %AAC
 % RPAC = zeros(1,N);
 % RAAC_new = zeros(1,N);
@@ -30,7 +30,7 @@ N = 1000;
 % 
 % strname = ['AAC_Simulations_',id];
 % save(strname)
-
+% 
 % %PAC
 % RPAC = zeros(1,N);
 % RAAC_new = zeros(1,N);
@@ -55,7 +55,7 @@ N = 1000;
 % 
 % strname = ['PAC_Simulations_',id];
 % save(strname)
-
+% 
 % %CFC
 % RPAC = zeros(1,N);
 % RAAC_new = zeros(1,N);
@@ -79,7 +79,7 @@ N = 1000;
 % 
 % strname = ['CFC_Simulations_',id];
 % save(strname)
-
+% 
 i = str2num(id);
 MOD = [0:.025:.5];
 mval_PAC = MOD(i);
@@ -89,7 +89,7 @@ p_PAC_new = zeros(1,N); p_AAC_new = zeros(1,N);
 MI = zeros(1,N); p_MI = zeros(1,N);
 
 for j = 1:N
-    [XX,P,Vlo,Vhi] = simfun(mval_PAC,2,'pink','empirical','none','none',.05);
+    [XX,P,Vlo,Vhi] = simfun(mval_PAC,0,'pink','empirical','none','none',.05);
     RPAC_new(j) = XX.rpac_new;
     RAAC_new(j) = XX.raac_new;
     p_PAC_new(j) = P.rpac_new; p_AAC_new(j) = P.raac_new;
