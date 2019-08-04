@@ -1,6 +1,6 @@
 % %% PAC AAC
-% addpath('Chaotic Systems Toolbox')
-% N = 1000;
+addpath('Chaotic Systems Toolbox')
+N = 1000;
 % 
 % %AAC
 % RPAC = zeros(1,N);
@@ -82,7 +82,7 @@
 % 
 i = str2num(id);
 MOD = [0:.025:.5];
-N = 1000;
+%N = 1000;
 mval_PAC = MOD(i);
 RAAC_new = zeros(1,N);
 RPAC_new = zeros(1,N);
