@@ -6,3 +6,6 @@ for i = 1:K
     pval_nochange(i) = I.d_pval;
     i
 end
+
+strname = ['New_Pval_Sim'];
+save(strname)
