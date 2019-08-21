@@ -135,6 +135,7 @@ function [XX,P,I] = glmfun_with_indicator_update(Vlo_pre,Vlo_post,Vhi_pre,Vhi_po
       
       XX.AAC_4D = AAC_4D;
       XX.rpac_new_indicator = max(max(max(abs(1-XX5./XX4))));
+      XX.rpac_condition = max(max(max(abs(1-XX8./XX4))));
       
 
   
@@ -144,6 +145,7 @@ function [XX,P,I] = glmfun_with_indicator_update(Vlo_pre,Vlo_post,Vhi_pre,Vhi_po
     P.raac = max(.5,length(find(M.raac>XX.raac)))/length(M.raac);
     P.rcfc = max(.5,length(find(M.rcfc>XX.rcfc)))/length(M.rcfc);
     P.rpac_indicator = max(.5,length(find(M.rpac_indicator>XX.rpac_new_indicator)))/length(M.rpac_indicator);
+    P.rpac_condition = max(.5,length(find(M.rpac_condition>XX.rpac_condition)))/length(M.rpac_condition);
   elseif exist('pval','var') && strcmp(pval, 'theoretical')
     P.rpac = chi2;  %use theoretical p-values
     P.raac = chi1;
@@ -152,39 +154,39 @@ function [XX,P,I] = glmfun_with_indicator_update(Vlo_pre,Vlo_post,Vhi_pre,Vhi_po
     P = 'No p-values output';
   end
   
-  %distance distributions between model 4 and model 8
-  M = 1000;
-  phi0 = linspace(-pi,pi,100);                                    %null model
-  Y1 = spline_phase0(phi0',nCtlPts);    
-         
-  bMC_w = b4*ones(1,M) + sqrtm(stats4.covb)*normrnd(0,1,length(b4),M);
-  bMC_wo = b8*ones(1,M) + sqrtm(stats8.covb)*normrnd(0,1,length(b8),M);
-  
-  d_w = zeros(1,M); d_wo = zeros(1,M);
-  for k = 1:M
-      XX_w = []; XX_wo = [];
-      b_w = bMC_w(:,k); b_wo = bMC_wo(:,k);
-      count = 1;
-      for i = 1:100:length(ampSORT)                                       %fit model over values of Alow
-          Y3 = [Y1,ampSORT(i)*ones(size(phi0))',ampSORT(i)*sin(phi0'),ampSORT(i)*cos(phi0')];        %CFC model, function of phiLo, ampLo, phiLo*ampLo
-          for j = 1:2
-              POST_val = ones(size(Y1))*(j-1); %all 1s or all 0s
-              Y4 = [Y3,Y1.*POST_val,ampSORT(i).*ones(100,1)*(j-1)];
-              [spline_w,~,~] = glmval(b_w,Y4,'log',stats4,'constant','off');
-              XX_w(:,count,j) = spline_w;
-              Y8 = [Y3,ampSORT(i).*ones(100,1)*(j-1)];
-              [spline_wo,~,~] = glmval(b_wo,Y8,'log',stats8,'constant','off');
-              XX_wo(:,count,j) = spline_wo;
-          end
-          count = count+1;
-      end
-      d_w(k) = max(max(max((abs(1-XX_w./XX4)))));
-      d_wo(k) = max(max(max((abs(1-XX_wo./XX8)))));
-  end
-
-  d_4_8 = max(max(max((abs(1-XX8./XX4)))));
-  I.d_w_pval = max(.5,length(find(d_w>d_4_8)))/length(d_w);
-  I.d_wo_pval = max(.5,length(find(d_wo>d_4_8)))/length(d_wo);
+%   %distance distributions between model 4 and model 8
+%   M = 1000;
+%   phi0 = linspace(-pi,pi,100);                                    %null model
+%   Y1 = spline_phase0(phi0',nCtlPts);    
+%          
+%   bMC_w = b4*ones(1,M) + sqrtm(stats4.covb)*normrnd(0,1,length(b4),M);
+%   bMC_wo = b8*ones(1,M) + sqrtm(stats8.covb)*normrnd(0,1,length(b8),M);
+%   
+%   d_w = zeros(1,M); d_wo = zeros(1,M);
+%   for k = 1:M
+%       XX_w = []; XX_wo = [];
+%       b_w = bMC_w(:,k); b_wo = bMC_wo(:,k);
+%       count = 1;
+%       for i = 1:100:length(ampSORT)                                       %fit model over values of Alow
+%           Y3 = [Y1,ampSORT(i)*ones(size(phi0))',ampSORT(i)*sin(phi0'),ampSORT(i)*cos(phi0')];        %CFC model, function of phiLo, ampLo, phiLo*ampLo
+%           for j = 1:2
+%               POST_val = ones(size(Y1))*(j-1); %all 1s or all 0s
+%               Y4 = [Y3,Y1.*POST_val,ampSORT(i).*ones(100,1)*(j-1)];
+%               [spline_w,~,~] = glmval(b_w,Y4,'log',stats4,'constant','off');
+%               XX_w(:,count,j) = spline_w;
+%               Y8 = [Y3,ampSORT(i).*ones(100,1)*(j-1)];
+%               [spline_wo,~,~] = glmval(b_wo,Y8,'log',stats8,'constant','off');
+%               XX_wo(:,count,j) = spline_wo;
+%           end
+%           count = count+1;
+%       end
+%       d_w(k) = max(max(max((abs(1-XX_w./XX4)))));
+%       d_wo(k) = max(max(max((abs(1-XX_wo./XX8)))));
+%   end
+% 
+%   d_4_8 = max(max(max((abs(1-XX8./XX4)))));
+%   I.d_w_pval = max(.5,length(find(d_w>d_4_8)))/length(d_w);
+%   I.d_wo_pval = max(.5,length(find(d_wo>d_4_8)))/length(d_wo);
   
   %confidence intervals
   if exist('ci','var') && strcmp(ci, 'ci')
@@ -277,20 +279,21 @@ end
 % Bootstrapped p-values
 function M = minvals(Vlo_pre,Vlo_post,Vhi_pre,Vhi_post)
     K = 100;
-    RPAC = zeros(1,K); RCFC = zeros(1,K); RAAC = zeros(1,K);  RPAC_indicator = zeros(1,K);
+    RPAC = zeros(1,K); RCFC = zeros(1,K); RAAC = zeros(1,K);  RPAC_indicator = zeros(1,K); RPAC_condition = zeros(1,K);
     for i = 1:K
-        i
+        %i
         Vhi = [Vhi_pre;Vhi_post];
         Vhi_prime = AAFT(Vhi,1);
         Vhi_prime_pre = Vhi_prime(1:length(Vhi_pre));
         Vhi_prime_post = Vhi_prime(length(Vhi_pre)+1:end);
-        [XX] = glmfun_with_indicator(Vlo_pre,Vlo_post,Vhi_prime_pre,Vhi_prime_post,'none','none',.05);
+        [XX] = glmfun_with_indicator_update(Vlo_pre,Vlo_post,Vhi_prime_pre,Vhi_prime_post,'none','none',.05);
         RPAC(i) = XX.rpac;
         RCFC(i) = XX.rcfc;
         RAAC(i) = XX.raac;
         RPAC_indicator(i) = XX.rpac_new_indicator;
+        RPAC_condition(i) = XX.rpac_condition;
     end
-    M.rpac = RPAC; M.rcfc = RCFC; M.raac = RAAC; M.rpac_indicator = RPAC_indicator;
+    M.rpac = RPAC; M.rcfc = RCFC; M.raac = RAAC; M.rpac_indicator = RPAC_indicator; M.rpac_condition = RPAC_condition;
 end
 
 % Generate a design matrix X (n by nCtlPts) for a phase signal (n by 1)
