@@ -1,5 +1,6 @@
 %% Code to Generate Quantile Figure
 addpath('Chaotic Systems Toolbox')
+Create_Signals;
 
 % Filter into high freq band.
 locutoff = 100;                             % High freq passband = [100, 140] Hz.
