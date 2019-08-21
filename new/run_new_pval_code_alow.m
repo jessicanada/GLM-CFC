@@ -22,7 +22,7 @@ m=[0       0                      1            1            0                   
 filtwts_lo = firls(filtorder,f,m);             % get FIR filter coefficients
 
 pval = [];
-for j = 1:100
+for j = 1:1000
     Create_Signals;
     VpinkTest = VpinkTest(2001:end-2000);
     
