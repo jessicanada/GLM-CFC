@@ -160,7 +160,7 @@ function [XX,P,I] = glmfun_with_indicator_update(Vlo_pre,Vlo_post,Vhi_pre,Vhi_po
   bMC_w = b4*ones(1,M) + sqrtm(stats4.covb)*normrnd(0,1,length(b4),M);
   bMC_wo = b8*ones(1,M) + sqrtm(stats8.covb)*normrnd(0,1,length(b8),M);
   
-  d = zeros(1,M);
+  d_w = zeros(1,M); d_wo = zeros(1,M);
   for k = 1:M
       XX_w = []; XX_wo = [];
       b_w = bMC_w(:,k); b_wo = bMC_wo(:,k);
@@ -172,17 +172,19 @@ function [XX,P,I] = glmfun_with_indicator_update(Vlo_pre,Vlo_post,Vhi_pre,Vhi_po
               Y4 = [Y3,Y1.*POST_val,ampSORT(i).*ones(100,1)*(j-1)];
               [spline_w,~,~] = glmval(b_w,Y4,'log',stats4,'constant','off');
               XX_w(:,count,j) = spline_w;
-              %Y8 = [Y3,ampSORT(i).*ones(100,1)*(j-1)];
-              %[spline_wo,~,~] = glmval(b_wo,Y8,'log',stats8,'constant','off');
-              %XX_wo(:,count,j) = spline_wo;
+              Y8 = [Y3,ampSORT(i).*ones(100,1)*(j-1)];
+              [spline_wo,~,~] = glmval(b_wo,Y8,'log',stats8,'constant','off');
+              XX_wo(:,count,j) = spline_wo;
           end
           count = count+1;
       end
-      d(k) = max(max(max((abs(1-XX_w./XX4)))));
+      d_w(k) = max(max(max((abs(1-XX_w./XX4)))));
+      d_wo(k) = max(max(max((abs(1-XX_wo./XX8)))));
   end
 
   d_4_8 = max(max(max((abs(1-XX8./XX4)))));
-  I.d_pval = max(.5,length(find(d>d_4_8)))/length(d);
+  I.d_w_pval = max(.5,length(find(d_w>d_4_8)))/length(d_w);
+  I.d_wo_pval = max(.5,length(find(d_wo>d_4_8)))/length(d_wo);
   
   %confidence intervals
   if exist('ci','var') && strcmp(ci, 'ci')
