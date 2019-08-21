@@ -13,7 +13,7 @@
 % save(strname)
 
 %%
-K = 100;
+K = 1000;
 addpath('Chaotic Systems Toolbox')
 p_change = zeros(1,K);p_nochange = zeros(1,K);
 for i = 1:K
