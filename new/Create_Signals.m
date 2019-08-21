@@ -1,8 +1,8 @@
-modulation_level = 1;
+modulation_level = 1; %3;
 
 dt = 0.002;  Fs = 1/dt;  fNQ = Fs/2;        % Simulated time series parameters.
 %N  = 20/dt+4000;                           % # steps to simulate.
-N  = 400/dt+4000; N = N/2;
+N  = 40/dt+4000; %N = N/2;
 t = (1:N)*dt;                               % Duration of simulation [s].
 
 VpinkTest = make_pink_noise(1,N,dt);         
