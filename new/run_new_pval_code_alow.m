@@ -1,5 +1,5 @@
 %% Code to Generate Quantile Figure
-Create_Signals;
+addpath('Chaotic Systems Toolbox')
 
 % Filter into high freq band.
 locutoff = 100;                             % High freq passband = [100, 140] Hz.
@@ -40,3 +40,6 @@ for j = 1:100
     [R,P,I] = glmfun_with_indicator_update(Vlo_pre',Vlo_post',Vhi_pre',Vhi_post','empirical','none',.05);
     pval(j) = P.rpac_condition;
 end
+
+strname = ['New_Pval_Condition_Sim_Alow'];
+save(strname)
