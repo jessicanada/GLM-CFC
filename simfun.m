@@ -2,31 +2,28 @@ function [XX,P,Vlo,Vhi,t] = simfun(pac_mod,aac_mod,sim_method,pval,ci,AIC,vararg
 %INPUTS:
 % pac_mod:          Intensity of PAC (I_PAC in paper)
 % aac_mod:          Intensity of AAC (I_AAC in paper)
-% sim_method:       'pink' creates coupled signals by filtering pink noise
-%                   'spiking' creates coupled signals by a stochastic
-%                   spiking neuron model
-% pval:          	'pval' gives bootstrapped p-values for R
-%                   'none' outputs no p-values (faster)
+% sim_method:       'GLM' creates coupled signals with a GLM approach,
+%                   'pink' creates coupled signals by filtering pink noise
+% pval:          	'theoretical' gives analytic p-values for R
+%                   'empirical' gives bootstrapped p-values for R
 % ci:               'ci' gives confidence intervals for R
 %                   'none' gives no confidence intervals (faster)
-% AIC:              'AIC' performs an AIC-based selection procedure to
-%                   choose the number of splines
-%                   'none' chooses the standard (n=10) number of splines
-%                   (faster)
+% AIC:              'AIC' computes number of control points for spline
+%                   phase via AIC minimization
 % varargin:         optionally, include the parameter q indicating which quantiles
 %                   of AmpLo you'd like to fit over
 %
 %OUTPUTS:
-% XX.rpac:          R_PAC value, confidence intervals XX.rPAC_CI
-% XX.raac:          R_AAC value, confidence intervals XX.rAAC_CI
-% XX.philow:        3D surface for Phi_low model in Phi_low, A_low, A_high space
-% XX.alow:          3D surface for A_low model in Phi_low, A_low, A_high space
-% XX.alowphilow:    3D surface for A_low,Phi_low model in Phi_low, A_low, A_high space
-% P.rpac:           p-value for RPAC statistic
-% P.raac:           p-value for RAAC statistic
-% Vlo:              simulated low-frequency signal
-% Vhi:              simulated high-frequency signal
-% t:                time
+% XX.rpac:                R_PAC value, confidence intervals XX.rPAC_CI
+% XX.raac:                R_AAC value, confidence intervals XX.rAAC_CI
+% XX.Phi_low:             3D surface for Phi_low model in Phi_low, A_low, A_high space
+% XX.A_low:               3D surface for A_low model in Phi_low, A_low, A_high space
+% XX.Phi_low_A_low:       3D surface for Phi_low,A_low model in Phi_low, A_low, A_high space
+% P.rpac:                 p-value for RPAC statistic
+% P.raac:                 p-value for RAAC statistic
+% Vlo:                    simulated low-frequency signal
+% Vhi:                    simulated high-frequency signal
+% t:                      time
 
 dt = 0.002;  Fs = 1/dt;  fNQ = Fs/2;        % Simulated time series parameters.
 N  = 20/dt+4000;                            % # steps to simulate, making the duration 20s
@@ -82,6 +79,11 @@ s = s/max(s);                                       % Normalize so it falls betw
 if exist('sim_method','var')
     
     switch sim_method
+        
+        case 'GLM'
+            Ahi = (1+pac_mod*s)';                           % Define Ahi.
+            Vhi = (0.01* Ahi .* cos(angle(hilbert(Vhi'))))';% ... and use PhiHi to get Vhi.
+            Vhi = Vhi.*(1+aac_mod*AmpLo/max(AmpLo));
             
         case 'pink'
             Vhi = Vhi.*(1+pac_mod*s);                       % Modulate high freq activity by modulation envelope.
