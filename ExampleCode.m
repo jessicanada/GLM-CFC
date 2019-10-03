@@ -1,135 +1,90 @@
 % Note: the following simulations use a GLM-based method to simulate V_low
-% and V_high, and the p-values are the analytical p-values from the
+% and V_high, and the p-values are the empirical bootstrapped p-values from the
 % manuscript
 
 %% Signal with neither PAC nor AAC
 
-[XX,P,Vlo,Vhi,t] = simfun(0,0,'pink','pval','none','none',.05);
-figure(1)
-plot(t,Vlo + .08,t,Vhi,'LineWidth',2); axis off
-hold on;
-[pks, ipks] = findpeaks(Vlo);
-for i = 1:length(ipks)
-    ind = ipks(i);
-    plot([t(ind),t(ind)],[Vlo(ind)+.07,Vlo(ind)+.09],'r','LineWidth',2)
-end
-plot([8,8.1],[-.04,-.04],'k','LineWidth',2)
-legend('V_{low}','V_{high}')
-axis off
-set(gca,'FontSize',13)
-str = strcat({'R_PAC is '},{num2str(XX.rpac)},{' with p-value '},{num2str(P.rpac)}); disp(str);
-str = strcat({'R_AAC is '},{num2str(XX.raac)},{' with p-value '},{num2str(P.raac)}); disp(str);
-xlim([8,10])
+[XX] = simfun(0,0,'pink','none','none','none',.05);
+d = 5;
+XX.ampAXIS = XX.ampAXIS(1:d:end);
+XX.phi0 = XX.phi0(1:d:end);
+XX.PAC = XX.Phi_low(1:d:end,1:d:end); XX.AAC = XX.A_low(1:d:end,1:d:end); XX.CFC = XX.Phi_low_A_low(1:d:end,1:d:end);
 
-figure(2)
-surf(XX.ampAXIS,XX.phi0,XX.philow,'EdgeColor','none','FaceAlpha',.8,'FaceColor',[35, 106, 185]/255);
+surf(XX.ampAXIS,XX.phi0,XX.PAC,'FaceAlpha',.8,'FaceColor',[35, 106, 185]/255);
 hold on;
-surf(XX.ampAXIS,XX.phi0,XX.alow,'EdgeColor','none','FaceAlpha',.8,'FaceColor',[214, 26, 70]/255);
-hold on;
-surf(XX.ampAXIS,XX.phi0,XX.alowphilow,'EdgeColor','none','FaceAlpha',.9,'FaceColor',[253, 220, 34]/255);
-
+surf(XX.ampAXIS,XX.phi0,XX.AAC,'FaceAlpha',.8,'FaceColor',[214, 26, 70]/255);
+surf(XX.ampAXIS,XX.phi0,XX.CFC,'FaceAlpha',.9,'FaceColor',[253, 220, 34]/255);
 xlim([min(XX.ampAXIS),max(XX.ampAXIS)]); ylim([min(XX.phi0),max(XX.phi0)])
 xlabel('A_{low}'); ylabel('\Phi_{low}'); zlabel('A_{high}')
-legend('PAC','AAC')
+legend('\phi_{low}','A_{low}','\phi_{low},A_{low}')
 set(gca,'FontSize',13)
+set(gca,'YTick',-pi:pi:pi) 
+set(gca,'YTickLabel',{'-\pi','0','\pi'})
+set(gca,'Ydir','reverse')
 grid off
-zlim([.004,.01])
+zlim([.002,.02])
 
 %% Signal with PAC
 
-[XX,P,Vlo,Vhi,t] = simfun(1,0,'pink','pval','none','none',.05);
-figure(1)
-plot(t,Vlo + .08,t,Vhi,'LineWidth',2); axis off
-hold on;
-[pks, ipks] = findpeaks(Vlo);
-for i = 1:length(ipks)
-    ind = ipks(i);
-    plot([t(ind),t(ind)],[Vlo(ind)+.07,Vlo(ind)+.09],'r','LineWidth',2)
-end
-plot([8,8.1],[-.04,-.04],'k','LineWidth',2)
-legend('V_{low}','V_{high}')
-axis off
-set(gca,'FontSize',13)
-str = strcat({'R_PAC is '},{num2str(XX.rpac)},{' with p-value '},{num2str(P.rpac)}); disp(str);
-str = strcat({'R_AAC is '},{num2str(XX.raac)},{' with p-value '},{num2str(P.raac)}); disp(str);
-xlim([8,10])
+[XX] = simfun(1,0,'pink','none','none','none',.05);
+d = 5;
+XX.ampAXIS = XX.ampAXIS(1:d:end);
+XX.phi0 = XX.phi0(1:d:end);
+XX.PAC = XX.Phi_low(1:d:end,1:d:end); XX.AAC = XX.A_low(1:d:end,1:d:end); XX.CFC = XX.Phi_low_A_low(1:d:end,1:d:end);
 
-figure(2)
-surf(XX.ampAXIS,XX.phi0,XX.philow,'EdgeColor','none','FaceAlpha',.8,'FaceColor',[35, 106, 185]/255);
+surf(XX.ampAXIS,XX.phi0,XX.PAC,'FaceAlpha',.8,'FaceColor',[35, 106, 185]/255);
 hold on;
-surf(XX.ampAXIS,XX.phi0,XX.alow,'EdgeColor','none','FaceAlpha',.8,'FaceColor',[214, 26, 70]/255);
-hold on;
-surf(XX.ampAXIS,XX.phi0,XX.alowphilow,'EdgeColor','none','FaceAlpha',.9,'FaceColor',[253, 220, 34]/255);
-
+surf(XX.ampAXIS,XX.phi0,XX.AAC,'FaceAlpha',.8,'FaceColor',[214, 26, 70]/255);
+surf(XX.ampAXIS,XX.phi0,XX.CFC,'FaceAlpha',.9,'FaceColor',[253, 220, 34]/255);
 xlim([min(XX.ampAXIS),max(XX.ampAXIS)]); ylim([min(XX.phi0),max(XX.phi0)])
 xlabel('A_{low}'); ylabel('\Phi_{low}'); zlabel('A_{high}')
-legend('PAC','AAC')
+legend('\phi_{low}','A_{low}','\phi_{low},A_{low}')
 set(gca,'FontSize',13)
+set(gca,'YTick',-pi:pi:pi) 
+set(gca,'YTickLabel',{'-\pi','0','\pi'})
+set(gca,'Ydir','reverse')
 grid off
-zlim([.004,.01])
-
+zlim([.002,.01])
 %% Signal with AAC
 
-[XX,P,Vlo,Vhi,t] = simfun(0,1,'pink','pval','none','none',.05);
-figure(1)
-plot(t,Vlo + .08,t,Vhi,'LineWidth',2); axis off
-hold on;
-[pks, ipks] = findpeaks(Vlo);
-for i = 1:length(ipks)
-    ind = ipks(i);
-    plot([t(ind),t(ind)],[Vlo(ind)+.07,Vlo(ind)+.09],'r','LineWidth',2)
-end
-plot([8,8.1],[-.04,-.04],'k','LineWidth',2)
-legend('V_{low}','V_{high}')
-axis off
-set(gca,'FontSize',13)
-str = strcat({'R_PAC is '},{num2str(XX.rpac)},{' with p-value '},{num2str(P.rpac)}); disp(str);
-str = strcat({'R_AAC is '},{num2str(XX.raac)},{' with p-value '},{num2str(P.raac)}); disp(str);
-xlim([8,10])
+[XX] = simfun(0,1,'pink','none','none','none',.05);
+d = 5;
+XX.ampAXIS = XX.ampAXIS(1:d:end);
+XX.phi0 = XX.phi0(1:d:end);
+XX.PAC = XX.Phi_low(1:d:end,1:d:end); XX.AAC = XX.A_low(1:d:end,1:d:end); XX.CFC = XX.Phi_low_A_low(1:d:end,1:d:end);
 
-figure(2)
-surf(XX.ampAXIS,XX.phi0,XX.philow,'EdgeColor','none','FaceAlpha',.8,'FaceColor',[35, 106, 185]/255);
+surf(XX.ampAXIS,XX.phi0,XX.PAC,'FaceAlpha',.8,'FaceColor',[35, 106, 185]/255);
 hold on;
-surf(XX.ampAXIS,XX.phi0,XX.alow,'EdgeColor','none','FaceAlpha',.8,'FaceColor',[214, 26, 70]/255);
-hold on;
-surf(XX.ampAXIS,XX.phi0,XX.alowphilow,'EdgeColor','none','FaceAlpha',.9,'FaceColor',[253, 220, 34]/255);
-
+surf(XX.ampAXIS,XX.phi0,XX.AAC,'FaceAlpha',.8,'FaceColor',[214, 26, 70]/255);
+surf(XX.ampAXIS,XX.phi0,XX.CFC,'FaceAlpha',.9,'FaceColor',[253, 220, 34]/255);
 xlim([min(XX.ampAXIS),max(XX.ampAXIS)]); ylim([min(XX.phi0),max(XX.phi0)])
 xlabel('A_{low}'); ylabel('\Phi_{low}'); zlabel('A_{high}')
-legend('PAC','AAC')
+legend('\phi_{low}','A_{low}','\phi_{low},A_{low}')
 set(gca,'FontSize',13)
+set(gca,'YTick',-pi:pi:pi) 
+set(gca,'YTickLabel',{'-\pi','0','\pi'})
+set(gca,'Ydir','reverse')
 grid off
-zlim([.004,.01])
+zlim([.002,.01])
 
 %% Signal with PAC and AAC
 
-[XX,P,Vlo,Vhi,t] = simfun(1,1,'pink','pval','none','none',.05);
-figure(1)
-plot(t,Vlo + .08,t,Vhi,'LineWidth',2); axis off
-hold on;
-[pks, ipks] = findpeaks(Vlo);
-for i = 1:length(ipks)
-    ind = ipks(i);
-    plot([t(ind),t(ind)],[Vlo(ind)+.07,Vlo(ind)+.09],'r','LineWidth',2)
-end
-plot([8,8.1],[-.04,-.04],'k','LineWidth',2)
-legend('V_{low}','V_{high}')
-axis off
-set(gca,'FontSize',13)
-str = strcat({'R_PAC is '},{num2str(XX.rpac)},{' with p-value '},{num2str(P.rpac)}); disp(str);
-str = strcat({'R_AAC is '},{num2str(XX.raac)},{' with p-value '},{num2str(P.raac)}); disp(str);
-xlim([8,10])
+[XX] = simfun(1,1,'pink','none','none','none',.05);
+d = 5;
+XX.ampAXIS = XX.ampAXIS(1:d:end);
+XX.phi0 = XX.phi0(1:d:end);
+XX.PAC = XX.Phi_low(1:d:end,1:d:end); XX.AAC = XX.A_low(1:d:end,1:d:end); XX.CFC = XX.Phi_low_A_low(1:d:end,1:d:end);
 
-figure(2)
-surf(XX.ampAXIS,XX.phi0,XX.philow,'EdgeColor','none','FaceAlpha',.8,'FaceColor',[35, 106, 185]/255);
+surf(XX.ampAXIS,XX.phi0,XX.PAC,'FaceAlpha',.8,'FaceColor',[35, 106, 185]/255);
 hold on;
-surf(XX.ampAXIS,XX.phi0,XX.alow,'EdgeColor','none','FaceAlpha',.8,'FaceColor',[214, 26, 70]/255);
-hold on;
-surf(XX.ampAXIS,XX.phi0,XX.alowphilow,'EdgeColor','none','FaceAlpha',.9,'FaceColor',[253, 220, 34]/255);
-
+surf(XX.ampAXIS,XX.phi0,XX.AAC,'FaceAlpha',.8,'FaceColor',[214, 26, 70]/255);
+surf(XX.ampAXIS,XX.phi0,XX.CFC,'FaceAlpha',.9,'FaceColor',[253, 220, 34]/255);
 xlim([min(XX.ampAXIS),max(XX.ampAXIS)]); ylim([min(XX.phi0),max(XX.phi0)])
 xlabel('A_{low}'); ylabel('\Phi_{low}'); zlabel('A_{high}')
-legend('PAC','AAC')
+legend('\phi_{low}','A_{low}','\phi_{low},A_{low}')
 set(gca,'FontSize',13)
+set(gca,'YTick',-pi:pi:pi) 
+set(gca,'YTickLabel',{'-\pi','0','\pi'})
+set(gca,'Ydir','reverse')
 grid off
-zlim([.004,.01])
+zlim([.002,.013])
