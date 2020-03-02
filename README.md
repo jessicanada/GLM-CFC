@@ -1,7 +1,7 @@
 # GLM-CFC
 A GLM based approach to measure CFC
 
-Code to measure cross-frequency coupling between two signals as described in this manuscript: [A statistical modeling framework to assess cross-frequency coupling while accounting for confounding effects]
+Code to measure cross-frequency coupling between two signals as described in this manuscript: https://elifesciences.org/articles/44287v1
 
 simfun: code to simulate signals V_low, V_high, with induced cross-frequency coupling and measure output statistics R_PAC, R_AAC, and R_CFC, along with confidence intervals and p-values
 
